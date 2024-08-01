@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -29,6 +30,7 @@ var rootCmd = &cobra.Command{
 		app := fx.New(
 			fx.NopLogger,
 			core.Module,
+			router.Module,
 			fx.Invoke(core.Stargazer),
 		)
 

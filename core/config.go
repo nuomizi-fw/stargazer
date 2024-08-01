@@ -6,27 +6,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-type ServerConfig struct {
+var Conf *Config
+
+type Server struct {
 	Address string
 	Port    int
 }
 
-type LoggerConfig struct{}
-
-type Auth struct {
-	Secret    string
-	Iteration int
-}
+type Logger struct{}
 
 type Config struct {
-	Server ServerConfig
-	Logger LoggerConfig
-	Auth   Auth
+	Server Server
+	Logger Logger
 }
 
 func NewConfig() *Config {
-	config := Config{}
-
 	v := viper.New()
 	v.SetConfigType("toml")
 	v.AddConfigPath("/etc/stargazer")
@@ -36,13 +30,10 @@ func NewConfig() *Config {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// Config file not found; ignore error if desired
-			// Write default config file
 			if err = v.SafeWriteConfig(); err != nil {
 				log.Fatalf("Failed to write default config file: %s", err)
 			}
 		} else {
-			// Config file was found but another error was produced
 			log.Fatalf("Failed to read config file: %s", err)
 		}
 	}
@@ -52,9 +43,9 @@ func NewConfig() *Config {
 	})
 	viper.WatchConfig()
 
-	if err := v.Unmarshal(&config); err != nil {
-		panic(err)
+	if err := v.Unmarshal(&Conf); err != nil {
+		log.Fatalf("Failed to unmarshal config: %s", err)
 	}
 
-	return &config
+	return Conf
 }
