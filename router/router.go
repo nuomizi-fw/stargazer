@@ -1,22 +1,17 @@
 package router
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
-	fx.Provide(NewStargazerRouter),
+	fx.Provide(NewStargazerApi),
 )
 
-type StargazerRouter struct{
-	
-}
+type StargazerRoute interface{}
 
-func NewStargazerRouter() *StargazerRouter {
-	return &StargazerRouter{}
-}
+type StargazerApi struct{}
 
-func (r *StargazerRouter) Echo(ctx *fiber.Ctx) {
-	ctx.SendString("Hello, World!")
+func NewStargazerApi() *StargazerApi {
+	return &StargazerApi{}
 }
