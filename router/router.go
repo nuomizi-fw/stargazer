@@ -9,7 +9,9 @@ var Module = fx.Options(
 	fx.Provide(NewStargazerRouter),
 )
 
-type StargazerRouter struct{}
+type StargazerRouter struct{
+	
+}
 
 func NewStargazerRouter() *StargazerRouter {
 	return &StargazerRouter{}
