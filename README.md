@@ -5,9 +5,9 @@ An All-in-One self-hosted solution for your videos, music, manga, novels and mor
 ## Tech Stack
 
 - **General**
-  - Language: Rust、TypeScript、JavaScript
+  - Language: Golang、TypeScript、JavaScript
   - Version Control: Git
-  - Package Manager: Cargo、bun
+  - Package Manager: go、bun
   - Database: SQLite
   - CI/CD: GitHub Actions
 - **Frontend**
@@ -17,10 +17,11 @@ An All-in-One self-hosted solution for your videos, music, manga, novels and mor
   - UI Library: ArkUI
   - Linting/Formatting: Biome
 - **Backend**
-  - Language: Rust
-  - Framework: Axum
+  - Language: Golang
+  - Framework: Fiber
+  - Wiring: fx
   - Database: SQLite
-  - ORM: SeaORM
+  - ORM: GORM
 
 ## Roadmap
 
