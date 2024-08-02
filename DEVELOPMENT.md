@@ -17,7 +17,7 @@ In this section we will walk you through the general process of setting up your 
 
 The following must be installed in order to get started. The details of how to install them is outside the scope of this doc, but generally they should be able to be installed with your systems package manager (apt, yum, brew, choco, etc).
 
-- Rust (nightly)
+- Go
 - Bun
 - Node.js
 
@@ -31,7 +31,7 @@ The following must be installed in order to get started. The details of how to i
 
 ```bash
 # Install Backent dependencies
-cargo build
+go mod tidy
 
 # Install Frontend dependencies
 bun install
