@@ -1,12 +1,12 @@
 package service
 
 type PingService interface {
-	Ping() string
+	GetPing() string
 }
 
 type pingService struct{}
 
-func (s *pingService) Ping() string {
+func (s *pingService) GetPing() string {
 	return "pong"
 }
 
