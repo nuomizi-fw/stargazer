@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Conf *Config
-
 type Server struct {
 	Address string
 	Port    int
@@ -15,12 +13,14 @@ type Server struct {
 
 type Logger struct{}
 
-type Config struct {
+type StargazerConfig struct {
 	Server Server
 	Logger Logger
 }
 
-func NewConfig() *Config {
+func NewStargazerConfig() *StargazerConfig {
+	var config StargazerConfig
+
 	v := viper.New()
 	v.SetConfigType("toml")
 	v.AddConfigPath("/etc/stargazer")
@@ -43,9 +43,9 @@ func NewConfig() *Config {
 	})
 	viper.WatchConfig()
 
-	if err := v.Unmarshal(&Conf); err != nil {
+	if err := v.Unmarshal(&config); err != nil {
 		log.Fatalf("Failed to unmarshal config: %s", err)
 	}
 
-	return Conf
+	return &config
 }
