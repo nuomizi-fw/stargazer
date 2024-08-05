@@ -14,6 +14,11 @@
     "turbo": "latest"
   },
   "packageManager": "bun@1.1.21",
-  "workspaces": ["apps/*"],
-  "trustedDependencies": ["@biomejs/biome"]
+  "workspaces": [
+    "docs",
+    "web"
+  ],
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }

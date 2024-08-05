@@ -32,7 +32,7 @@ var rootCmd = &cobra.Command{
 			core.Module,
 			router.Module,
 			service.Module,
-			fx.Invoke(core.Stargazer),
+			fx.Invoke(StartStargazer),
 		)
 
 		if err := app.Start(ctx); err != nil {
@@ -43,6 +43,31 @@ var rootCmd = &cobra.Command{
 
 		<-ctx.Done()
 	},
+}
+
+func StartStargazer(
+	lc fx.Lifecycle,
+	api *router.StargazerApi,
+	server *core.StargazerServer,
+) {
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			api.InitStargazerApi()
+
+			go func() {
+				if err := server.Start(); err != nil {
+					panic(err)
+				}
+			}()
+			return nil
+		},
+		OnStop: func(ctx context.Context) error {
+			if err := server.Shutdown(); err != nil {
+				return err
+			}
+			return nil
+		},
+	})
 }
 
 func Execute() {

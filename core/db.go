@@ -2,4 +2,10 @@ package core
 
 import "gorm.io/gorm"
 
-var DB *gorm.DB
+type StargazerDB struct {
+	DB *gorm.DB
+}
+
+func NewStargazerDB() *gorm.DB {
+	return &gorm.DB{}
+}
