@@ -1,31 +1,36 @@
 package router
 
 import (
-	"github.com/nuomizi-fw/stargazer/core"
-	"github.com/nuomizi-fw/stargazer/service"
 	"go.uber.org/fx"
 )
 
-var Module = fx.Options(
-	fx.Provide(NewStargazerApi),
+var Module = fx.Module(
+	"router",
+	fx.Provide(
+		NewStargazerRouter,
+	),
+	// Add new router below
+	fx.Provide(
+		NewPingRouter,
+	),
 )
 
-type StargazerApi struct {
-	Stargazer *core.StargazerServer
-
-	PingService service.PingService
+type StargazerRouter interface {
+	InitRouter()
 }
 
-func (sa *StargazerApi) InitStargazerApi() {
-	sa.Stargazer.Api.Get("/ping", sa.GetPing)
+type StargazerRouters []StargazerRouter
+
+func (sr StargazerRouters) InitRouter() {
+	for _, router := range sr {
+		router.InitRouter()
+	}
 }
 
-func NewStargazerApi(
-	stargazer *core.StargazerServer,
-	pingService service.PingService,
-) *StargazerApi {
-	return &StargazerApi{
-		Stargazer:   stargazer,
-		PingService: pingService,
+func NewStargazerRouter(
+	pingRouter PingRouter,
+) StargazerRouters {
+	return StargazerRouters{
+		pingRouter,
 	}
 }
