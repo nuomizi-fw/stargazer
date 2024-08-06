@@ -2,11 +2,14 @@ package service
 
 import "go.uber.org/fx"
 
-var Module = fx.Options(
-	fx.Provide(NewService),
-	fx.Provide(
-		// Add new service here
-		NewPingService,
+var Module = fx.Module(
+	"service",
+	fx.Options(
+		fx.Provide(NewService),
+		// Add new service below
+		fx.Provide(
+			NewPingService,
+		),
 	),
 )
 

@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/middleware"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
 	"github.com/spf13/cobra"
@@ -32,6 +33,7 @@ var rootCmd = &cobra.Command{
 			core.Module,
 			router.Module,
 			service.Module,
+			middleware.Module,
 			fx.Invoke(StartStargazer),
 		)
 
@@ -47,22 +49,25 @@ var rootCmd = &cobra.Command{
 
 func StartStargazer(
 	lc fx.Lifecycle,
-	api *router.StargazerApi,
-	server *core.StargazerServer,
+	router router.StargazerRouters,
+	middleware middleware.StargazerMiddlewares,
+	// config core.StargazerConfig,
+	server core.StargazerServer,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			api.InitStargazerApi()
+			router.InitRouter()
+			middleware.InitMiddleware()
 
 			go func() {
-				if err := server.Start(); err != nil {
+				if err := server.App.Listen(":3000"); err != nil {
 					panic(err)
 				}
 			}()
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
-			if err := server.Shutdown(); err != nil {
+			if err := server.App.Shutdown(); err != nil {
 				return err
 			}
 			return nil

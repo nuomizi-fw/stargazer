@@ -2,10 +2,13 @@ package core
 
 import "go.uber.org/fx"
 
-var Module = fx.Options(
-	fx.Provide(
-		NewStargazerConfig,
-		NewStargazerDB,
-		NewStargazerServer,
+var Module = fx.Module(
+	"core",
+	fx.Options(
+		fx.Provide(
+			NewStargazerConfig,
+			NewStargazerDB,
+			NewStargazerServer,
+		),
 	),
 )
