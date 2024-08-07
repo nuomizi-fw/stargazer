@@ -1,0 +1,16 @@
+[server]
+port = ":11451"
+debug = true
+
+[server.tls]
+enable = false
+cert_file = "cert.pem"
+key_file = "key.pem"
+
+[database]
+
+[logger]
+log_level = "debug"
+log_path = "/var/log/stargazer"
+log_name = "stargazer"
+log_ext = "log"

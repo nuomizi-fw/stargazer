@@ -6,13 +6,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/middleware"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
 var rootCmd = &cobra.Command{
@@ -30,6 +30,7 @@ var rootCmd = &cobra.Command{
 		}()
 
 		app := fx.New(
+			fx.NopLogger,
 			core.Module,
 			router.Module,
 			service.Module,
@@ -39,7 +40,7 @@ var rootCmd = &cobra.Command{
 
 		if err := app.Start(ctx); err != nil {
 			if err != context.Canceled {
-				zap.L().Fatal("Failed to start application", zap.Error(err))
+				log.Fatalf("Failed to start app: %s", err)
 			}
 		}
 
@@ -51,7 +52,7 @@ func StartStargazer(
 	lc fx.Lifecycle,
 	router router.StargazerRouters,
 	middleware middleware.StargazerMiddlewares,
-	// config core.StargazerConfig,
+	config core.StargazerConfig,
 	server core.StargazerServer,
 ) {
 	lc.Append(fx.Hook{
@@ -60,8 +61,14 @@ func StartStargazer(
 			middleware.InitMiddleware()
 
 			go func() {
-				if err := server.App.Listen(":3000"); err != nil {
-					panic(err)
+				if config.Server.TLS.Enabled {
+					if err := server.App.ListenTLS(config.Server.Port, config.Server.TLS.CertFile, config.Server.TLS.KeyFile); err != nil {
+						log.Panic("Failed to start server: ", err)
+					}
+				} else {
+					if err := server.App.Listen(config.Server.Port); err != nil {
+						log.Panic("Failed to start server: ", err)
+					}
 				}
 			}()
 			return nil
