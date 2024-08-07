@@ -6,6 +6,6 @@ type StargazerDB struct {
 	DB *gorm.DB
 }
 
-func NewStargazerDB() *gorm.DB {
-	return &gorm.DB{}
+func NewStargazerDB() StargazerDB {
+	return StargazerDB{}
 }

@@ -8,6 +8,7 @@ var Module = fx.Module(
 		fx.Provide(
 			NewStargazerConfig,
 			NewStargazerDB,
+			NewStargazerLogger,
 			NewStargazerServer,
 		),
 	),
