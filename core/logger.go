@@ -1,12 +1,17 @@
 package core
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
+
+var zapLogger *zap.Logger
 
 type StargazerLogger struct {
-	*zap.SugaredLogger
+	*zap.Logger
 }
 
 func NewStargazerLogger() StargazerLogger {
-	logger, _ := zap.NewProduction()
-	return StargazerLogger{logger.Sugar()}
+	zapLogger, _ = zap.NewProduction()
+
+	return StargazerLogger{zapLogger}
 }

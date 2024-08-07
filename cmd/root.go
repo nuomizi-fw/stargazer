@@ -13,6 +13,8 @@ import (
 	"github.com/nuomizi-fw/stargazer/service"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
+	"go.uber.org/fx/fxevent"
+	"go.uber.org/zap"
 )
 
 var rootCmd = &cobra.Command{
@@ -30,6 +32,9 @@ var rootCmd = &cobra.Command{
 		}()
 
 		app := fx.New(
+			fx.WithLogger(func(logger core.StargazerLogger) fxevent.Logger {
+				return &fxevent.ZapLogger{Logger: logger.Logger}
+			}),
 			fx.NopLogger,
 			core.Module,
 			router.Module,
@@ -52,6 +57,7 @@ func StartStargazer(
 	lc fx.Lifecycle,
 	router router.StargazerRouters,
 	middleware middleware.StargazerMiddlewares,
+	logger core.StargazerLogger,
 	config core.StargazerConfig,
 	server core.StargazerServer,
 ) {
@@ -63,11 +69,11 @@ func StartStargazer(
 			go func() {
 				if config.Server.TLS.Enabled {
 					if err := server.App.ListenTLS(config.Server.Port, config.Server.TLS.CertFile, config.Server.TLS.KeyFile); err != nil {
-						log.Panic("Failed to start server: ", err)
+						logger.Panic("Failed to start https server: %s", zap.Error(err))
 					}
 				} else {
 					if err := server.App.Listen(config.Server.Port); err != nil {
-						log.Panic("Failed to start server: ", err)
+						logger.Panic("Failed to start http server: %s", zap.Error(err))
 					}
 				}
 			}()
