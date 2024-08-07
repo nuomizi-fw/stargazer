@@ -38,7 +38,7 @@ func NewStargazerConfig() StargazerConfig {
 
 	if err := v.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			if err := v.SafeWriteConfigAs("stargazer.toml"); err != nil {
+			if err = v.SafeWriteConfigAs("stargazer.toml"); err != nil {
 				log.Fatalf("Failed to write config: %s", err)
 			}
 		} else {

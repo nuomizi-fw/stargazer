@@ -1,10 +1,10 @@
 package core
 
 import (
+	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -15,7 +15,7 @@ type StargazerServer struct {
 	Api fiber.Router
 }
 
-func NewStargazerServer(config StargazerConfig) StargazerServer {
+func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerServer {
 	app := fiber.New(fiber.Config{
 		Prefork:           true,
 		CaseSensitive:     true,
@@ -25,8 +25,11 @@ func NewStargazerServer(config StargazerConfig) StargazerServer {
 		EnablePrintRoutes: true,
 	})
 
+	app.Use(fiberzap.New(fiberzap.Config{
+		Logger: sl.Logger,
+	}))
+
 	app.Use(recover.New())
-	app.Use(logger.New())
 	app.Use(compress.New())
 
 	if config.Server.Debug {

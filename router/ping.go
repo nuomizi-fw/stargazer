@@ -7,21 +7,23 @@ import (
 )
 
 type PingRouter struct {
-	Stargazer   core.StargazerServer
-	PingService service.PingService
+	stargazer   core.StargazerServer
+	logger      core.StargazerLogger
+	pingService service.PingService
 }
 
-func NewPingRouter(stargazer core.StargazerServer, pingService service.PingService) PingRouter {
+func NewPingRouter(stargazer core.StargazerServer, logger core.StargazerLogger, pingService service.PingService) PingRouter {
 	return PingRouter{
-		Stargazer:   stargazer,
-		PingService: pingService,
+		stargazer:   stargazer,
+		logger:      logger,
+		pingService: pingService,
 	}
 }
 
 func (pr PingRouter) InitRouter() {
-	pr.Stargazer.Api.Get("/ping", pr.GetPing)
+	pr.stargazer.Api.Get("/ping", pr.GetPing)
 }
 
 func (pr *PingRouter) GetPing(ctx *fiber.Ctx) error {
-	return ctx.SendString(pr.PingService.GetPing())
+	return ctx.SendString(pr.pingService.GetPing())
 }
