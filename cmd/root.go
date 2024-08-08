@@ -60,11 +60,13 @@ func StartStargazer(
 	logger core.StargazerLogger,
 	config core.StargazerConfig,
 	server core.StargazerServer,
+	db core.StargazerDB,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			router.InitRouter()
 			middleware.InitMiddleware()
+			db.AutoMigrate()
 
 			go func() {
 				if config.Server.TLS.Enabled {
