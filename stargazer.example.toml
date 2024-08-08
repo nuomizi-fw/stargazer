@@ -8,9 +8,13 @@ cert_file = "cert.pem"
 key_file = "key.pem"
 
 [database]
+type = "sqlite3"
+port = 0
+db_file = "stargazer.db"
+table_prefix = "sg_"
 
 [logger]
 log_level = "debug"
-log_path = "/var/log/stargazer"
+log_path = "logs"
 log_name = "stargazer"
 log_ext = "log"
