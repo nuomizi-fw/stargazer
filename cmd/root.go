@@ -32,10 +32,10 @@ var rootCmd = &cobra.Command{
 		}()
 
 		app := fx.New(
-			fx.WithLogger(func(logger core.StargazerLogger) fxevent.Logger {
-				return &fxevent.ZapLogger{Logger: logger.Logger}
+			fx.WithLogger(func() fxevent.Logger {
+				logger := core.NewStargazerLogger()
+				return logger.GetFxLogger()
 			}),
-			fx.NopLogger,
 			core.Module,
 			router.Module,
 			service.Module,

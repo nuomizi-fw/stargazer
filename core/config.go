@@ -15,7 +15,17 @@ type Server struct {
 	} `mapstructure:"tls"`
 }
 
-type Database struct{}
+type Database struct {
+	Type        string
+	Host        string
+	Port        int
+	User        string
+	Password    string
+	Name        string
+	DBFile      string
+	TablePrefix string `mapstructure:"table_prefix"`
+	SSLMode     string
+}
 
 type Logger struct {
 	LogLevel string `mapstructure:"log_level"`
@@ -28,6 +38,36 @@ type StargazerConfig struct {
 	Server   Server
 	Database Database
 	Logger   Logger
+}
+
+func defaultStargazerConfig() StargazerConfig {
+	return StargazerConfig{
+		Server: Server{
+			Port:  "11451",
+			Debug: true,
+			TLS: struct {
+				Enabled  bool   `mapstructure:"enabled"`
+				CertFile string `mapstructure:"cert_file"`
+				KeyFile  string `mapstructure:"key_file"`
+			}{
+				Enabled:  false,
+				CertFile: "",
+				KeyFile:  "",
+			},
+		},
+		Database: Database{
+			Type:        "sqlite3",
+			Port:        0,
+			DBFile:      "stargazer.db",
+			TablePrefix: "sg_",
+		},
+		Logger: Logger{
+			LogLevel: "debug",
+			LogPath:  "logs",
+			LogName:  "stargazer",
+			LogExt:   "log",
+		},
+	}
 }
 
 func NewStargazerConfig() StargazerConfig {
