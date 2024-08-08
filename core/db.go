@@ -1,11 +1,13 @@
 package core
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type StargazerDB struct {
 	DB *gorm.DB
 }
 
-func NewStargazerDB() StargazerDB {
+func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB {
 	return StargazerDB{}
 }

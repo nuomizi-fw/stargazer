@@ -3,6 +3,7 @@ package core
 import (
 	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -26,7 +27,11 @@ func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerSer
 	})
 
 	app.Use(fiberzap.New(fiberzap.Config{
-		Logger: sl.Logger,
+		Logger: sl.SugaredLogger.Desugar(),
+	}))
+
+	log.SetLogger(fiberzap.NewLogger(fiberzap.LoggerConfig{
+		SetLogger: sl.SugaredLogger.Desugar(),
 	}))
 
 	app.Use(recover.New())
