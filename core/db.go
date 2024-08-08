@@ -8,10 +8,7 @@ import (
 )
 
 type StargazerDB struct {
-	DB *gorm.DB
-}
-
-func (db StargazerDB) AutoMigrate() {
+	*gorm.DB
 }
 
 func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB {
@@ -27,5 +24,5 @@ func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB 
 	c.SetMaxOpenConns(1)
 	c.SetConnMaxIdleTime(time.Second * 1000)
 
-	return StargazerDB{DB: db}
+	return StargazerDB{db}
 }

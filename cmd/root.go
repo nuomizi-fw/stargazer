@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/middleware"
+	"github.com/nuomizi-fw/stargazer/model"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
 	"github.com/spf13/cobra"
@@ -37,9 +38,10 @@ var rootCmd = &cobra.Command{
 				return logger.GetFxLogger()
 			}),
 			core.Module,
+			middleware.Module,
+			model.Module,
 			router.Module,
 			service.Module,
-			middleware.Module,
 			fx.Invoke(StartStargazer),
 		)
 
@@ -55,18 +57,19 @@ var rootCmd = &cobra.Command{
 
 func StartStargazer(
 	lc fx.Lifecycle,
-	router router.StargazerRouters,
-	middleware middleware.StargazerMiddlewares,
-	logger core.StargazerLogger,
 	config core.StargazerConfig,
-	server core.StargazerServer,
 	db core.StargazerDB,
+	logger core.StargazerLogger,
+	server core.StargazerServer,
+	middleware middleware.StargazerMiddlewares,
+	model model.StargazerModel,
+	router router.StargazerRouters,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			router.InitRouter()
 			middleware.InitMiddleware()
-			db.AutoMigrate()
+			model.AutoMigrate()
 
 			go func() {
 				if config.Server.TLS.Enabled {

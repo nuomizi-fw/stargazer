@@ -75,6 +75,8 @@ func defaultStargazerConfig() StargazerConfig {
 func NewStargazerConfig() StargazerConfig {
 	v := viper.New()
 	v.AddConfigPath(".")
+	v.AddConfigPath("$HOME/.config/.stargazer")
+	v.AddConfigPath("/etc/stargazer")
 	v.SetConfigName("stargazer")
 	v.SetConfigType("toml")
 
@@ -88,7 +90,7 @@ func NewStargazerConfig() StargazerConfig {
 		}
 	}
 
-	var config StargazerConfig
+	config := defaultStargazerConfig()
 
 	if err := v.Unmarshal(&config); err != nil {
 		log.Fatalf("Failed to unmarshal config: %s", err)

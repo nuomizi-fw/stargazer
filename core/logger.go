@@ -11,10 +11,7 @@ import (
 	gormlogger "gorm.io/gorm/logger"
 )
 
-var (
-	globalLogger *StargazerConfig
-	zapLogger    *zap.Logger
-)
+var zapLogger *zap.Logger
 
 type StargazerLogger struct {
 	*zap.SugaredLogger
@@ -71,6 +68,7 @@ func newStargazerLogger(config StargazerConfig) StargazerLogger {
 	default:
 		level = zap.PanicLevel
 	}
+
 	zapConfig.Level.SetLevel(level)
 
 	zapLogger, _ = zapConfig.Build()
