@@ -47,7 +47,7 @@ func newStargazerLogger(config StargazerConfig) StargazerLogger {
 		zapConfig.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	} else {
 		zapConfig = zap.NewProductionConfig()
-		// zapConfig.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		zapConfig.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
 		if logOutputPath != "" {
 			zapConfig.OutputPaths = []string{logOutputPath}

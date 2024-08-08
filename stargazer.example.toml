@@ -1,6 +1,7 @@
 [server]
 port = ":11451"
 debug = true
+prefork = false
 
 [server.tls]
 enable = false
