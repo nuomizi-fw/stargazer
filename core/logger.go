@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"go.uber.org/fx/fxevent"
@@ -37,6 +38,12 @@ func NewStargazerLogger() StargazerLogger {
 func newStargazerLogger(config StargazerConfig) StargazerLogger {
 	var zapConfig zap.Config
 
+	if _, err := os.Stat(config.Logger.LogPath); os.IsNotExist(err) {
+		if err := os.MkdirAll(config.Logger.LogPath, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
+
 	logOutputPath := config.Logger.LogPath + "/" + config.Logger.LogName + "." + config.Logger.LogExt
 
 	if config.Server.Debug {
@@ -46,30 +53,23 @@ func newStargazerLogger(config StargazerConfig) StargazerLogger {
 		zapConfig = zap.NewProductionConfig()
 		zapConfig.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
-		if logOutputPath != "" {
-			zapConfig.OutputPaths = []string{logOutputPath}
-		}
+		zapConfig.OutputPaths = []string{logOutputPath}
 	}
 
-	logLevel := config.Logger.LogLevel
-	level := zap.PanicLevel
-
-	switch logLevel {
+	switch config.Logger.LogLevel {
 	case "debug":
-		level = zapcore.DebugLevel
+		zapConfig.Level.SetLevel(zapcore.DebugLevel)
 	case "info":
-		level = zapcore.InfoLevel
+		zapConfig.Level.SetLevel(zapcore.InfoLevel)
 	case "warn":
-		level = zapcore.WarnLevel
+		zapConfig.Level.SetLevel(zapcore.WarnLevel)
 	case "error":
-		level = zapcore.ErrorLevel
+		zapConfig.Level.SetLevel(zapcore.ErrorLevel)
 	case "fatal":
-		level = zapcore.FatalLevel
+		zapConfig.Level.SetLevel(zapcore.FatalLevel)
 	default:
-		level = zap.PanicLevel
+		zapConfig.Level.SetLevel(zapcore.PanicLevel)
 	}
-
-	zapConfig.Level.SetLevel(level)
 
 	zapLogger, _ = zapConfig.Build()
 
