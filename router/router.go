@@ -1,6 +1,12 @@
 package router
 
 import (
+	"github.com/nuomizi-fw/stargazer/router/download"
+	"github.com/nuomizi-fw/stargazer/router/manga"
+	"github.com/nuomizi-fw/stargazer/router/music"
+	"github.com/nuomizi-fw/stargazer/router/novel"
+	"github.com/nuomizi-fw/stargazer/router/search"
+	"github.com/nuomizi-fw/stargazer/router/video"
 	"go.uber.org/fx"
 )
 
@@ -11,7 +17,29 @@ var Module = fx.Module(
 	),
 	// Add new router below
 	fx.Provide(
-		NewPingRouter,
+		// User routers
+		NewUserRouter,
+
+		// Download routers
+		download.NewAria2Router,
+		download.NewBittorrentRouter,
+
+		// Manga routers
+		manga.NewMangaRouter,
+
+		// Music routers
+		music.NewMusicRouter,
+
+		// Novel routers
+		novel.NewNovelRouter,
+
+		// Search routers
+		search.NewSearchRouter,
+
+		// Video routers
+		video.NewAnimeRouter,
+		video.NewMovieRouter,
+		video.NewVideoRouter,
 	),
 )
 
@@ -28,9 +56,41 @@ func (sr StargazerRouters) InitRouter() {
 }
 
 func NewStargazerRouter(
-	pingRouter PingRouter,
+	// User routers
+	userRouter UserRouter,
+	// Download routers
+	aria2Router download.Aria2Router,
+	bittorrentRouter download.BittorrentRouter,
+	// Manga routers
+	mangaRouter manga.MangaRouter,
+	// Music routers
+	musicRouter music.MusicRouter,
+	// Novel routers
+	novelRouter novel.NovelRouter,
+	// Search routers
+	searchRouter search.SearchRouter,
+	// Video routers
+	animeRouter video.AnimeRouter,
+	movieRouter video.MovieRouter,
+	videoRouter video.VideoRouter,
 ) StargazerRouters {
 	return StargazerRouters{
-		pingRouter,
+		// User routers
+		userRouter,
+		// Download routers
+		aria2Router,
+		bittorrentRouter,
+		// Manga routers
+		mangaRouter,
+		// Music routers
+		musicRouter,
+		// Novel routers
+		novelRouter,
+		// Search routers
+		searchRouter,
+		// Video routers
+		animeRouter,
+		movieRouter,
+		videoRouter,
 	}
 }
