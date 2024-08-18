@@ -37,8 +37,6 @@ var Module = fx.Module(
 		search.NewSearchRouter,
 
 		// Video routers
-		video.NewAnimeRouter,
-		video.NewMovieRouter,
 		video.NewVideoRouter,
 	),
 )
@@ -70,8 +68,6 @@ func NewStargazerRouter(
 	// Search routers
 	searchRouter search.SearchRouter,
 	// Video routers
-	animeRouter video.AnimeRouter,
-	movieRouter video.MovieRouter,
 	videoRouter video.VideoRouter,
 ) StargazerRouters {
 	return StargazerRouters{
@@ -89,8 +85,6 @@ func NewStargazerRouter(
 		// Search routers
 		searchRouter,
 		// Video routers
-		animeRouter,
-		movieRouter,
 		videoRouter,
 	}
 }
