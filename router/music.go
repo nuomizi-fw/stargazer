@@ -1,4 +1,4 @@
-package music
+package router
 
 import "github.com/nuomizi-fw/stargazer/core"
 

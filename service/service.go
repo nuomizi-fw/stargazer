@@ -10,31 +10,21 @@ var Module = fx.Module(
 		fx.Provide(NewService),
 		// Add new service below
 		fx.Provide(
-			// User Services
+			NewAuthService,
 			NewUserService,
-
-			// Download Services
 			NewAria2Service,
 			NewBittorrentService,
-
-			// Manga Services
 			NewMangaService,
-
-			// Music Services
 			NewMusicService,
-
-			// Novel Services
-
-			// Search Services
+			NewNovelService,
 			NewSearchService,
-
-			// Video Services
 			NewVideoService,
 		),
 	),
 )
 
 type StargazerService interface {
+	Auth() AuthService
 	User() UserService
 	Aria2() Aria2Service
 	Bittorrent() BittorrentService
@@ -45,6 +35,7 @@ type StargazerService interface {
 }
 
 type stargazerService struct {
+	auth       AuthService
 	user       UserService
 	aria2      Aria2Service
 	bittorrent BittorrentService
@@ -52,6 +43,10 @@ type stargazerService struct {
 	music      MusicService
 	search     SearchService
 	video      VideoService
+}
+
+func (ss *stargazerService) Auth() AuthService {
+	return ss.auth
 }
 
 func (ss *stargazerService) User() UserService {
@@ -84,6 +79,7 @@ func (ss *stargazerService) Video() VideoService {
 
 func NewService() StargazerService {
 	return &stargazerService{
+		auth:       NewAuthService(),
 		user:       NewUserService(),
 		aria2:      NewAria2Service(),
 		bittorrent: NewBittorrentService(),

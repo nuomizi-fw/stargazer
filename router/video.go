@@ -1,4 +1,4 @@
-package video
+package router
 
 import "github.com/nuomizi-fw/stargazer/core"
 

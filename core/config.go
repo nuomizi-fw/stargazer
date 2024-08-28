@@ -13,7 +13,7 @@ type Server struct {
 		Enabled  bool   `mapstructure:"enabled"`
 		CertFile string `mapstructure:"cert_file"`
 		KeyFile  string `mapstructure:"key_file"`
-	} `mapstructure:"tls"`
+	}
 }
 
 type Database struct {
@@ -26,6 +26,7 @@ type Database struct {
 	DBFile      string
 	TablePrefix string `mapstructure:"table_prefix"`
 	SSLMode     string
+	Migrate     bool
 }
 
 type Logger struct {
@@ -62,6 +63,7 @@ func defaultStargazerConfig() StargazerConfig {
 			Port:        0,
 			DBFile:      "stargazer.db",
 			TablePrefix: "sg_",
+			Migrate:     true,
 		},
 		Logger: Logger{
 			LogLevel: "debug",

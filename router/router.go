@@ -1,12 +1,6 @@
 package router
 
 import (
-	"github.com/nuomizi-fw/stargazer/router/download"
-	"github.com/nuomizi-fw/stargazer/router/manga"
-	"github.com/nuomizi-fw/stargazer/router/music"
-	"github.com/nuomizi-fw/stargazer/router/novel"
-	"github.com/nuomizi-fw/stargazer/router/search"
-	"github.com/nuomizi-fw/stargazer/router/video"
 	"go.uber.org/fx"
 )
 
@@ -17,27 +11,15 @@ var Module = fx.Module(
 	),
 	// Add new router below
 	fx.Provide(
-		// User routers
+		NewAuthRouter,
 		NewUserRouter,
-
-		// Download routers
-		download.NewAria2Router,
-		download.NewBittorrentRouter,
-
-		// Manga routers
-		manga.NewMangaRouter,
-
-		// Music routers
-		music.NewMusicRouter,
-
-		// Novel routers
-		novel.NewNovelRouter,
-
-		// Search routers
-		search.NewSearchRouter,
-
-		// Video routers
-		video.NewVideoRouter,
+		NewAria2Router,
+		NewBittorrentRouter,
+		NewMangaRouter,
+		NewMusicRouter,
+		NewNovelRouter,
+		NewSearchRouter,
+		NewVideoRouter,
 	),
 )
 
@@ -54,37 +36,25 @@ func (sr StargazerRouters) InitRouter() {
 }
 
 func NewStargazerRouter(
-	// User routers
+	authRouter AuthRouter,
 	userRouter UserRouter,
-	// Download routers
-	aria2Router download.Aria2Router,
-	bittorrentRouter download.BittorrentRouter,
-	// Manga routers
-	mangaRouter manga.MangaRouter,
-	// Music routers
-	musicRouter music.MusicRouter,
-	// Novel routers
-	novelRouter novel.NovelRouter,
-	// Search routers
-	searchRouter search.SearchRouter,
-	// Video routers
-	videoRouter video.VideoRouter,
+	aria2Router Aria2Router,
+	bittorrentRouter BittorrentRouter,
+	mangaRouter MangaRouter,
+	musicRouter MusicRouter,
+	novelRouter NovelRouter,
+	searchRouter SearchRouter,
+	videoRouter VideoRouter,
 ) StargazerRouters {
 	return StargazerRouters{
-		// User routers
+		authRouter,
 		userRouter,
-		// Download routers
 		aria2Router,
 		bittorrentRouter,
-		// Manga routers
 		mangaRouter,
-		// Music routers
 		musicRouter,
-		// Novel routers
 		novelRouter,
-		// Search routers
 		searchRouter,
-		// Video routers
 		videoRouter,
 	}
 }

@@ -1,4 +1,4 @@
-package download
+package router
 
 import (
 	"github.com/nuomizi-fw/stargazer/core"

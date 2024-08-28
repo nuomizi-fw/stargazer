@@ -1,4 +1,4 @@
-package novel
+package router
 
 import "github.com/nuomizi-fw/stargazer/core"
 

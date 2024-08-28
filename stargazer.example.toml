@@ -13,6 +13,7 @@ type = "sqlite3"
 port = 0
 db_file = "stargazer.db"
 table_prefix = "sg_"
+migrate = true
 
 [logger]
 log_level = "debug"
