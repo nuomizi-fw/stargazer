@@ -26,8 +26,10 @@ var Module = fx.Module(
 type StargazerService interface {
 	Auth() AuthService
 	User() UserService
+	Rss() RssService
 	Aria2() Aria2Service
 	Bittorrent() BittorrentService
+	Transmission() TransmissionService
 	Manga() MangaService
 	Music() MusicService
 	Search() SearchService
@@ -35,14 +37,16 @@ type StargazerService interface {
 }
 
 type stargazerService struct {
-	auth       AuthService
-	user       UserService
-	aria2      Aria2Service
-	bittorrent BittorrentService
-	manga      MangaService
-	music      MusicService
-	search     SearchService
-	video      VideoService
+	auth         AuthService
+	user         UserService
+	rss          RssService
+	aria2        Aria2Service
+	bittorrent   BittorrentService
+	transmission TransmissionService
+	manga        MangaService
+	music        MusicService
+	search       SearchService
+	video        VideoService
 }
 
 func (ss *stargazerService) Auth() AuthService {
@@ -53,12 +57,20 @@ func (ss *stargazerService) User() UserService {
 	return ss.user
 }
 
+func (ss *stargazerService) Rss() RssService {
+	return ss.rss
+}
+
 func (ss *stargazerService) Aria2() Aria2Service {
 	return ss.aria2
 }
 
 func (ss *stargazerService) Bittorrent() BittorrentService {
 	return ss.bittorrent
+}
+
+func (ss *stargazerService) Transmission() TransmissionService {
+	return ss.transmission
 }
 
 func (ss *stargazerService) Manga() MangaService {

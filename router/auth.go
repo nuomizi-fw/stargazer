@@ -1,7 +1,6 @@
 package router
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/service"
 )
@@ -29,25 +28,9 @@ func (ar AuthRouter) InitRouter() {
 
 	auth := ar.stargazer.App.Group("/auth")
 	{
-		auth.Post("/register", ar.Register)
-		auth.Post("/login", ar.Login)
-		auth.Post("/mfa-login", ar.MFALogin)
-		auth.Post("/reset-password", ar.ResetPassword)
+		auth.Post("/register", ar.auth.Register)
+		auth.Post("/login", ar.auth.Login)
+		auth.Post("/mfa-login", ar.auth.MFALogin)
+		auth.Post("/reset-password", ar.auth.ResetPassword)
 	}
-}
-
-func (ar AuthRouter) Register(ctx *fiber.Ctx) error {
-	return nil
-}
-
-func (ar AuthRouter) Login(ctx *fiber.Ctx) error {
-	return nil
-}
-
-func (ar AuthRouter) MFALogin(ctx *fiber.Ctx) error {
-	return nil
-}
-
-func (ar AuthRouter) ResetPassword(ctx *fiber.Ctx) error {
-	return nil
 }
