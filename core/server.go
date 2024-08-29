@@ -1,6 +1,7 @@
 package core
 
 import (
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -17,12 +18,15 @@ type StargazerServer struct {
 
 func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerServer {
 	app := fiber.New(fiber.Config{
-		Prefork:           config.Server.Prefork,
-		CaseSensitive:     true,
-		StrictRouting:     true,
-		ServerHeader:      "Stargazer",
-		AppName:           "Stargazer",
-		EnablePrintRoutes: true,
+		Prefork:               config.Server.Prefork,
+		CaseSensitive:         true,
+		StrictRouting:         true,
+		ServerHeader:          "Stargazer",
+		AppName:               "Stargazer",
+		EnablePrintRoutes:     true,
+		DisableStartupMessage: true,
+		JSONEncoder:           sonic.Marshal,
+		JSONDecoder:           sonic.Unmarshal,
 	})
 
 	app.Use(fiberzap.New(fiberzap.Config{
