@@ -19,6 +19,7 @@
     "web"
   ],
   "trustedDependencies": [
-    "@biomejs/biome"
+    "@biomejs/biome",
+    "esbuild"
   ]
 }
