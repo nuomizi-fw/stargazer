@@ -30,7 +30,7 @@ func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerSer
 	})
 
 	app.Use(fiberzap.New(fiberzap.Config{
-		Logger: sl.SugaredLogger.Desugar(),
+		Logger: sl.Desugar(),
 	}))
 	app.Use(recover.New())
 	app.Use(compress.New())
