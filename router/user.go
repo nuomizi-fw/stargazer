@@ -52,3 +52,7 @@ func (ur *UserRouter) SetUserPermission(ctx *fiber.Ctx) error {
 func (ur *UserRouter) ResetPassword(ctx *fiber.Ctx) error {
 	return nil
 }
+
+func (ur *UserRouter) RefreshToken(ctx *fiber.Ctx) error {
+	return nil
+}

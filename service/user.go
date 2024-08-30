@@ -9,6 +9,7 @@ type UserService interface {
 	SetUserRole() error
 	SetUserPermission() error
 	ResetPassword() error
+	RefreshToken() error
 }
 
 type userService struct{}
@@ -46,5 +47,9 @@ func (us *userService) SetUserPermission() error {
 }
 
 func (us *userService) ResetPassword() error {
+	return nil
+}
+
+func (ur *userService) RefreshToken() error {
 	return nil
 }
