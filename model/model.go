@@ -1,22 +1,11 @@
 package model
 
 import (
-	"time"
-
 	"github.com/nuomizi-fw/stargazer/core"
 	"go.uber.org/fx"
-	"gorm.io/gorm"
 )
 
 var Module = fx.Module("model", fx.Provide(NewStargazerModels))
-
-type BaseModel struct {
-	gorm.Model
-	ID        int            `json:"id" gorm:"column:id;primaryKey"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
-}
 
 type StargazerModel struct {
 	models []interface{}
@@ -48,6 +37,9 @@ func NewStargazerModels(
 		config: config,
 		models: []interface{}{
 			&User{},
+			&Bangumi{},
+			&Season{},
+			&CastMember{},
 		},
 	}
 }

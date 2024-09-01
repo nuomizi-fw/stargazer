@@ -1,5 +1,7 @@
 package service
 
+import "github.com/nuomizi-fw/stargazer/core"
+
 type UserService interface {
 	GetUser() error
 	GetUsers() error
@@ -7,15 +9,20 @@ type UserService interface {
 	UpdateUser() error
 	DeleteUser() error
 	SetUserRole() error
-	SetUserPermission() error
 	ResetPassword() error
 	RefreshToken() error
 }
 
-type userService struct{}
+type userService struct {
+	db     core.StargazerDB
+	logger core.StargazerLogger
+}
 
-func NewUserService() UserService {
-	return &userService{}
+func NewUserService(
+	db core.StargazerDB,
+	logger core.StargazerLogger,
+) UserService {
+	return &userService{db, logger}
 }
 
 func (us *userService) GetUser() error {
@@ -39,10 +46,6 @@ func (us *userService) DeleteUser() error {
 }
 
 func (us *userService) SetUserRole() error {
-	return nil
-}
-
-func (us *userService) SetUserPermission() error {
 	return nil
 }
 

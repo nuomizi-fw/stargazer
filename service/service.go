@@ -1,24 +1,26 @@
 package service
 
 import (
+	"github.com/nuomizi-fw/stargazer/core"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Module(
 	"service",
 	fx.Options(
-		fx.Provide(NewService),
+		fx.Provide(NewStargazerService),
 		// Add new service below
 		fx.Provide(
 			NewAuthService,
 			NewUserService,
 			NewAria2Service,
 			NewBittorrentService,
+			NewTransmissionService,
 			NewMangaService,
 			NewMusicService,
 			NewNovelService,
 			NewSearchService,
-			NewVideoService,
+			NewBangumiService,
 		),
 	),
 )
@@ -33,7 +35,7 @@ type StargazerService interface {
 	Manga() MangaService
 	Music() MusicService
 	Search() SearchService
-	Video() VideoService
+	Bangumi() BangumiService
 }
 
 type stargazerService struct {
@@ -46,7 +48,7 @@ type stargazerService struct {
 	manga        MangaService
 	music        MusicService
 	search       SearchService
-	video        VideoService
+	bangumi      BangumiService
 }
 
 func (ss *stargazerService) Auth() AuthService {
@@ -85,19 +87,22 @@ func (ss *stargazerService) Search() SearchService {
 	return ss.search
 }
 
-func (ss *stargazerService) Video() VideoService {
-	return ss.video
+func (ss *stargazerService) Bangumi() BangumiService {
+	return ss.bangumi
 }
 
-func NewService() StargazerService {
+func NewStargazerService(
+	db core.StargazerDB,
+	logger core.StargazerLogger,
+) StargazerService {
 	return &stargazerService{
-		auth:       NewAuthService(),
-		user:       NewUserService(),
+		auth:       NewAuthService(db, logger),
+		user:       NewUserService(db, logger),
 		aria2:      NewAria2Service(),
 		bittorrent: NewBittorrentService(),
 		manga:      NewMangaService(),
 		music:      NewMusicService(),
 		search:     NewSearchService(),
-		video:      NewVideoService(),
+		bangumi:    NewBangumiService(),
 	}
 }

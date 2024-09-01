@@ -1,5 +1,7 @@
 package service
 
+import "github.com/nuomizi-fw/stargazer/core"
+
 type AuthService interface {
 	Register() error
 	Login() error
@@ -7,10 +9,16 @@ type AuthService interface {
 	ForgotPassword() error
 }
 
-type authService struct{}
+type authService struct {
+	db     core.StargazerDB
+	logger core.StargazerLogger
+}
 
-func NewAuthService() AuthService {
-	return &authService{}
+func NewAuthService(
+	db core.StargazerDB,
+	logger core.StargazerLogger,
+) AuthService {
+	return &authService{db, logger}
 }
 
 func (as *authService) Register() error {

@@ -19,7 +19,7 @@ var Module = fx.Module(
 		NewMusicRouter,
 		NewNovelRouter,
 		NewSearchRouter,
-		NewVideoRouter,
+		NewBangumiRouter,
 	),
 )
 
@@ -44,7 +44,7 @@ func NewStargazerRouter(
 	musicRouter MusicRouter,
 	novelRouter NovelRouter,
 	searchRouter SearchRouter,
-	videoRouter VideoRouter,
+	bangumiRouter BangumiRouter,
 ) StargazerRouters {
 	return StargazerRouters{
 		authRouter,
@@ -55,6 +55,6 @@ func NewStargazerRouter(
 		musicRouter,
 		novelRouter,
 		searchRouter,
-		videoRouter,
+		bangumiRouter,
 	}
 }
