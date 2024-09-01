@@ -12,6 +12,7 @@
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.1",
     "@solidjs/start": "^1.0.6",
+    "@tanstack/solid-store": "^0.5.5",
     "lucide-solid": "^0.418.0",
     "solid-js": "^1.8.18",
     "vinxi": "^0.4.1"
