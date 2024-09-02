@@ -50,172 +50,77 @@ func (br BangumiRouter) InitRouter() {
 	}
 }
 
-// @Summary 扫描本地动漫并自动刮削
-// @Description 扫描指定目录中的所有动漫文件，并自动刮削相关信息
-// @Tags Bangumi
-// @Accept json
-// @Produce json
-// @Param directory body string true "Directory Path"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/bangumi/scan-local [post]
+// 扫描指定目录中的所有动漫文件，并自动刮削相关信息
 func (br BangumiRouter) ScanBangumi(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 获取观看历史
-// @Description 获取用户的观看历史
-// @Tags WatchHistory
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/watch-history [get]
+// 获取用户的观看历史
 func (br BangumiRouter) GetWatchHistory(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 添加观看历史
-// @Description 添加新的观看历史
-// @Tags WatchHistory
-// @Accept json
-// @Produce json
-// @Param history body string true "Watch History"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/watch-history [post]
+// 添加新的观看历史
 func (br BangumiRouter) AddWatchHistory(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 更新观看历史
-// @Description 更新现有的观看历史
-// @Tags WatchHistory
-// @Accept json
-// @Produce json
-// @Param history body string true "Watch History"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/watch-history [put]
+// 更新现有的观看历史
 func (br BangumiRouter) UpdateWatchHistory(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 删除观看历史
-// @Description 删除指定的观看历史
-// @Tags WatchHistory
-// @Produce json
-// @Param id path string true "Watch History ID"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/watch-history/{id} [delete]
+// 删除指定的观看历史
 func (br BangumiRouter) DeleteWatchHistory(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 获取收藏夹
-// @Description 获取用户的收藏夹
-// @Tags Favorites
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/favorites [get]
+// 获取用户的收藏夹
 func (br BangumiRouter) GetFavorites(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 添加收藏
-// @Description 添加新的收藏
-// @Tags Favorites
-// @Accept json
-// @Produce json
-// @Param favorite body string true "Favorite"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/favorites [post]
+// 添加新的收藏
 func (br BangumiRouter) AddFavorite(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 删除收藏
-// @Description 删除指定的收藏
-// @Tags Favorites
-// @Produce json
-// @Param id path string true "Favorite ID"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/favorites/{id} [delete]
+// 删除指定的收藏
 func (br BangumiRouter) DeleteFavorite(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 获取标签
-// @Description 获取所有标签
-// @Tags Tags
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/tags [get]
+// 获取所有标签
 func (br BangumiRouter) GetTags(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 添加标签
-// @Description 添加新的标签
-// @Tags Tags
-// @Accept json
-// @Produce json
-// @Param tag body string true "Tag"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/tags [post]
+// 添加新的标签
 func (br BangumiRouter) AddTag(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 删除标签
-// @Description 删除指定的标签
-// @Tags Tags
-// @Produce json
-// @Param id path string true "Tag ID"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/tags/{id} [delete]
+// 删除指定的标签
 func (br BangumiRouter) DeleteTag(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 获取集合
-// @Description 获取所有集合
-// @Tags Collections
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/collections [get]
+// 获取所有集合
 func (br BangumiRouter) GetCollections(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 添加集合
-// @Description 添加新的集合
-// @Tags Collections
-// @Accept json
-// @Produce json
-// @Param collection body string true "Collection"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/collections [post]
+// 添加新的集合
 func (br BangumiRouter) AddCollection(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 删除集合
-// @Description 删除指定的集合
-// @Tags Collections
-// @Produce json
-// @Param id path string true "Collection ID"
-// @Success 200 {object} map[string]interface{}
-// @Router /api/bangumi/collections/{id} [delete]
+// 删除指定的集合
 func (br BangumiRouter) DeleteCollection(c *fiber.Ctx) error {
 	return nil
 }
 
-// @Summary 获取番剧流媒体
-// @Description 获取指定番剧的流媒体
-// @Tags Feeds
-// @Produce application/octet-stream
-// @Param id path string true "Bangumi ID"
-// @Success 200 {string} string "binary data"
-// @Failure 404 {object} map[string]interface{}
-// @Router /api/bangumi/feeds/{id} [get]
+// 获取指定番剧的流媒体
 func (br BangumiRouter) BangumiFeeds(c *fiber.Ctx) error {
 	return nil
 }
