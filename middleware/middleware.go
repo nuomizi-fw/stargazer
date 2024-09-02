@@ -9,7 +9,6 @@ var Module = fx.Module(
 		// Add new middleware below
 		fx.Provide(NewJWTMiddleware),
 		fx.Provide(NewCorsMiddleware),
-		fx.Provide(NewSwaggerMiddleware),
 	),
 )
 

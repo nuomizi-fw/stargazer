@@ -19,11 +19,7 @@ func NewJWTMiddleware(
 	logger core.StargazerLogger,
 	stargazer core.StargazerServer,
 ) JWTMiddleware {
-	return JWTMiddleware{
-		config:    config,
-		logger:    logger,
-		stargazer: stargazer,
-	}
+	return JWTMiddleware{config, logger, stargazer}
 }
 
 func (jm JWTMiddleware) InitMiddleware() {

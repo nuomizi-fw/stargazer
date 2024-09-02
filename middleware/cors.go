@@ -3,15 +3,17 @@ package middleware
 import "github.com/nuomizi-fw/stargazer/core"
 
 type CorsMiddleware struct {
-	config core.StargazerConfig
-	logger core.StargazerLogger
+	config    core.StargazerConfig
+	logger    core.StargazerLogger
+	stargazer core.StargazerServer
 }
 
-func NewCorsMiddleware(config core.StargazerConfig, logger core.StargazerLogger) CorsMiddleware {
-	return CorsMiddleware{
-		config: config,
-		logger: logger,
-	}
+func NewCorsMiddleware(
+	config core.StargazerConfig,
+	logger core.StargazerLogger,
+	stargazer core.StargazerServer,
+) CorsMiddleware {
+	return CorsMiddleware{config, logger, stargazer}
 }
 
 func (cm CorsMiddleware) InitMiddleware() {
