@@ -13,6 +13,7 @@
     "@solidjs/router": "^0.14.3",
     "@solidjs/start": "^1.0.6",
     "@tanstack/solid-store": "^0.5.5",
+    "ky": "^1.7.1",
     "lucide-solid": "^0.418.0",
     "solid-js": "^1.8.22",
     "vinxi": "^0.4.2"
