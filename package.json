@@ -5,7 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "biome lint --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "prepare": "bun run --filter @stargazer/web prepare"
   },
   "dependencies": {
     "@biomejs/biome": "^1.8.3"
@@ -13,7 +14,7 @@
   "devDependencies": {
     "turbo": "latest"
   },
-  "packageManager": "bun@1.1.21",
+  "packageManager": "bun@1.1.26",
   "workspaces": [
     "docs",
     "web"

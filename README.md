@@ -13,7 +13,7 @@ An All-in-One self-hosted solution for your videos, music, manga, novels and mor
 - **Frontend**
   - Language: TypeScript、JavaScript
   - Framework: SolidStart
-  - Styling: TailwindCSS
+  - Styling: PandaCSS
   - UI Library: ArkUI
   - Linting/Formatting: Biome
 - **Backend**
@@ -29,7 +29,7 @@ An All-in-One self-hosted solution for your videos, music, manga, novels and mor
   - [ ] Torrents: Download files using BitTorrent.
   - [ ] Aria2: Download files using Aria2.
   - [ ] HTTP: Download files using HTTP.
-  
+
 - **Videos**
   - [ ] Auto-organize
   - [ ] Manual-organize
@@ -73,4 +73,3 @@ An All-in-One self-hosted solution for your videos, music, manga, novels and mor
   - [ ] Tags
   - [ ] Novel Viewer
   - [ ] Read History
-  
