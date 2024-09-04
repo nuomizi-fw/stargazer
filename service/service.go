@@ -25,20 +25,7 @@ var Module = fx.Module(
 	),
 )
 
-type StargazerService interface {
-	Auth() AuthService
-	User() UserService
-	Rss() RssService
-	Aria2() Aria2Service
-	Bittorrent() BittorrentService
-	Transmission() TransmissionService
-	Manga() MangaService
-	Music() MusicService
-	Search() SearchService
-	Bangumi() BangumiService
-}
-
-type stargazerService struct {
+type StargazerService struct {
 	auth         AuthService
 	user         UserService
 	rss          RssService
@@ -51,51 +38,11 @@ type stargazerService struct {
 	bangumi      BangumiService
 }
 
-func (ss *stargazerService) Auth() AuthService {
-	return ss.auth
-}
-
-func (ss *stargazerService) User() UserService {
-	return ss.user
-}
-
-func (ss *stargazerService) Rss() RssService {
-	return ss.rss
-}
-
-func (ss *stargazerService) Aria2() Aria2Service {
-	return ss.aria2
-}
-
-func (ss *stargazerService) Bittorrent() BittorrentService {
-	return ss.bittorrent
-}
-
-func (ss *stargazerService) Transmission() TransmissionService {
-	return ss.transmission
-}
-
-func (ss *stargazerService) Manga() MangaService {
-	return ss.manga
-}
-
-func (ss *stargazerService) Music() MusicService {
-	return ss.music
-}
-
-func (ss *stargazerService) Search() SearchService {
-	return ss.search
-}
-
-func (ss *stargazerService) Bangumi() BangumiService {
-	return ss.bangumi
-}
-
 func NewStargazerService(
 	db core.StargazerDB,
 	logger core.StargazerLogger,
 ) StargazerService {
-	return &stargazerService{
+	return StargazerService{
 		auth:       NewAuthService(db, logger),
 		user:       NewUserService(db, logger),
 		aria2:      NewAria2Service(),

@@ -5,5 +5,5 @@ type MusicService interface{}
 type musicService struct{}
 
 func NewMusicService() MusicService {
-	return musicService{}
+	return &musicService{}
 }
