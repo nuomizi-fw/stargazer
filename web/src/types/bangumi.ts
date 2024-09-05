@@ -5,7 +5,7 @@ export interface Bangumi {
   japaneseTitle: string;
   status: string;
   score: number;
-  genres: string[];
+  tags: string;
   synopsis: string;
   coverImage: string;
   trailerURL: string;
