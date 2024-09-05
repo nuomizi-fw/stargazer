@@ -39,7 +39,7 @@ func newStargazerLogger(config StargazerConfig) StargazerLogger {
 	var zapConfig zap.Config
 
 	if _, err := os.Stat(config.Logger.LogPath); os.IsNotExist(err) {
-		if err := os.MkdirAll(config.Logger.LogPath, os.ModePerm); err != nil {
+		if err := os.MkdirAll(config.Logger.LogPath, 0o750); err != nil {
 			panic(err)
 		}
 	}

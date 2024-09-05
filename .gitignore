@@ -247,3 +247,5 @@ stargazer.toml
 ## Panda
 styled-system
 styled-system-studio
+
+dist/
