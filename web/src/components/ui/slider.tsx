@@ -1,16 +1,16 @@
-import { Index, type JSX, Show, children, splitProps } from 'solid-js'
-import * as StyledSlider from './styled/slider'
+import { Index, type JSX, Show, children, splitProps } from "solid-js";
+import * as StyledSlider from "./styled/slider";
 
 export interface SliderProps extends StyledSlider.RootProps {
   marks?: {
-    value: number
-    label?: JSX.Element
-  }[]
+    value: number;
+    label?: JSX.Element;
+  }[];
 }
 
 export const Slider = (props: SliderProps) => {
-  const [localProps, rootProps] = splitProps(props, ['children', 'marks'])
-  const getChildren = children(() => localProps.children)
+  const [localProps, rootProps] = splitProps(props, ["children", "marks"]);
+  const getChildren = children(() => localProps.children);
 
   return (
     <StyledSlider.Root {...rootProps}>
@@ -36,7 +36,9 @@ export const Slider = (props: SliderProps) => {
               <StyledSlider.MarkerGroup>
                 <Index each={localProps.marks}>
                   {(mark) => (
-                    <StyledSlider.Marker value={mark().value}>{mark().label}</StyledSlider.Marker>
+                    <StyledSlider.Marker value={mark().value}>
+                      {mark().label}
+                    </StyledSlider.Marker>
                   )}
                 </Index>
               </StyledSlider.MarkerGroup>
@@ -45,5 +47,5 @@ export const Slider = (props: SliderProps) => {
         )}
       </StyledSlider.Context>
     </StyledSlider.Root>
-  )
-}
+  );
+};

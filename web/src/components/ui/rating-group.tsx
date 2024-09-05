@@ -1,10 +1,10 @@
-import { Index, Show, children } from 'solid-js'
-import * as StyledRatingGroup from './styled/rating-group'
+import { Index, Show, children } from "solid-js";
+import * as StyledRatingGroup from "./styled/rating-group";
 
 export interface RatingGroupProps extends StyledRatingGroup.RootProps {}
 
 export const RatingGroup = (props: RatingGroupProps) => {
-  const getChildren = children(() => props.children)
+  const getChildren = children(() => props.children);
 
   return (
     <StyledRatingGroup.Root {...props}>
@@ -32,11 +32,11 @@ export const RatingGroup = (props: RatingGroupProps) => {
       </StyledRatingGroup.Control>
       <StyledRatingGroup.HiddenInput />
     </StyledRatingGroup.Root>
-  )
-}
+  );
+};
 
 interface Props {
-  half?: boolean
+  half?: boolean;
 }
 
 const StarIcon = (props: Props) => (
@@ -59,8 +59,8 @@ const StarIcon = (props: Props) => (
       </linearGradient>
     </defs>
     <polygon
-      fill={props.half ? 'url(#half)' : 'inherit'}
+      fill={props.half ? "url(#half)" : "inherit"}
       points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
     />
   </svg>
-)
+);

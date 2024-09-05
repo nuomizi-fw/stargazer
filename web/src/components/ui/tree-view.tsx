@@ -1,22 +1,22 @@
-import { For, Show, splitProps } from 'solid-js'
-import * as StyledTreeView from './styled/tree-view'
+import { For, Show, splitProps } from "solid-js";
+import * as StyledTreeView from "./styled/tree-view";
 
 interface Child {
-  value: string
-  name: string
-  children?: Child[]
+  value: string;
+  name: string;
+  children?: Child[];
 }
 
 export interface TreeViewData {
-  label: string
-  children: Child[]
+  label: string;
+  children: Child[];
 }
 
 export interface TreeViewProps extends StyledTreeView.RootProps {
-  data: TreeViewData
+  data: TreeViewData;
 }
 export const TreeView = (props: TreeViewProps) => {
-  const [localProps, rootProps] = splitProps(props, ['data'])
+  const [localProps, rootProps] = splitProps(props, ["data"]);
 
   const renderChild = (child: Child) => (
     <Show
@@ -39,16 +39,18 @@ export const TreeView = (props: TreeViewProps) => {
         </StyledTreeView.BranchContent>
       </StyledTreeView.Branch>
     </Show>
-  )
+  );
 
   return (
     <StyledTreeView.Root aria-label={localProps.data.label} {...rootProps}>
       <StyledTreeView.Tree>
-        <For each={localProps.data.children}>{(child) => renderChild(child)}</For>
+        <For each={localProps.data.children}>
+          {(child) => renderChild(child)}
+        </For>
       </StyledTreeView.Tree>
     </StyledTreeView.Root>
-  )
-}
+  );
+};
 
 const ChevronRightIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -62,4 +64,4 @@ const ChevronRightIcon = () => (
       d="m9 18l6-6l-6-6"
     />
   </svg>
-)
+);

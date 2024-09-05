@@ -1,10 +1,10 @@
-import { Show, children } from 'solid-js'
-import * as StyledCheckbox from './styled/checkbox'
+import { Show, children } from "solid-js";
+import * as StyledCheckbox from "./styled/checkbox";
 
 export interface CheckboxProps extends StyledCheckbox.RootProps {}
 
 export const Checkbox = (props: CheckboxProps) => {
-  const getChildren = children(() => props.children)
+  const getChildren = children(() => props.children);
 
   return (
     <StyledCheckbox.Root {...props}>
@@ -21,8 +21,8 @@ export const Checkbox = (props: CheckboxProps) => {
       </Show>
       <StyledCheckbox.HiddenInput />
     </StyledCheckbox.Root>
-  )
-}
+  );
+};
 
 const CheckIcon = () => (
   <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@ const CheckIcon = () => (
       stroke-linejoin="round"
     />
   </svg>
-)
+);
 
 const MinusIcon = () => (
   <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,4 +48,4 @@ const MinusIcon = () => (
       stroke-linejoin="round"
     />
   </svg>
-)
+);

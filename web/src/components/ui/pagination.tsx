@@ -1,7 +1,7 @@
-import { For } from 'solid-js'
-import { Button } from './button'
-import { IconButton } from './icon-button'
-import * as StyledPagination from './styled/pagination'
+import { For } from "solid-js";
+import { Button } from "./button";
+import { IconButton } from "./icon-button";
+import * as StyledPagination from "./styled/pagination";
 
 export interface PaginationProps extends StyledPagination.RootProps {}
 
@@ -19,7 +19,7 @@ export const Pagination = (props: PaginationProps) => {
         {(pagiation) => (
           <For each={pagiation().pages}>
             {(page, index) =>
-              page.type === 'page' ? (
+              page.type === "page" ? (
                 <StyledPagination.Item
                   {...page}
                   asChild={(props) => <Button {...props} variant="outline" />}
@@ -27,7 +27,9 @@ export const Pagination = (props: PaginationProps) => {
                   {page.value}
                 </StyledPagination.Item>
               ) : (
-                <StyledPagination.Ellipsis index={index()}>&#8230;</StyledPagination.Ellipsis>
+                <StyledPagination.Ellipsis index={index()}>
+                  &#8230;
+                </StyledPagination.Ellipsis>
               )
             }
           </For>
@@ -41,8 +43,8 @@ export const Pagination = (props: PaginationProps) => {
         )}
       />
     </StyledPagination.Root>
-  )
-}
+  );
+};
 
 const ChevronLeftIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -56,7 +58,7 @@ const ChevronLeftIcon = () => (
       d="m15 18l-6-6l6-6"
     />
   </svg>
-)
+);
 
 const ChevronRightIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -70,4 +72,4 @@ const ChevronRightIcon = () => (
       d="m9 18l6-6l-6-6"
     />
   </svg>
-)
+);

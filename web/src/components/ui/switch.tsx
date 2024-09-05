@@ -1,10 +1,10 @@
-import { Show, children } from 'solid-js'
-import * as StyledSwitch from './styled/switch'
+import { Show, children } from "solid-js";
+import * as StyledSwitch from "./styled/switch";
 
 export interface SwitchProps extends StyledSwitch.RootProps {}
 
 export const Switch = (props: SwitchProps) => {
-  const getChildren = children(() => props.children)
+  const getChildren = children(() => props.children);
 
   return (
     <StyledSwitch.Root {...props}>
@@ -16,5 +16,5 @@ export const Switch = (props: SwitchProps) => {
       </Show>
       <StyledSwitch.HiddenInput />
     </StyledSwitch.Root>
-  )
-}
+  );
+};

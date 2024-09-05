@@ -1,21 +1,23 @@
-import { splitProps } from 'solid-js'
-import * as StyledAvatar from './styled/avatar'
+import { splitProps } from "solid-js";
+import * as StyledAvatar from "./styled/avatar";
 
 export interface AvatarProps extends StyledAvatar.RootProps {
-  name?: string
-  src?: string
+  name?: string;
+  src?: string;
 }
 
 export const Avatar = (props: AvatarProps) => {
-  const [localProps, rootProps] = splitProps(props, ['name', 'src'])
+  const [localProps, rootProps] = splitProps(props, ["name", "src"]);
 
   return (
     <StyledAvatar.Root {...rootProps}>
-      <StyledAvatar.Fallback>{getInitials(localProps.name) || <UserIcon />}</StyledAvatar.Fallback>
+      <StyledAvatar.Fallback>
+        {getInitials(localProps.name) || <UserIcon />}
+      </StyledAvatar.Fallback>
       <StyledAvatar.Image src={localProps.src} alt={localProps.name} />
     </StyledAvatar.Root>
-  )
-}
+  );
+};
 
 const UserIcon = () => (
   <svg
@@ -29,12 +31,12 @@ const UserIcon = () => (
     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
     <circle cx="12" cy="7" r="4" />
   </svg>
-)
+);
 
-const getInitials = (name = '') =>
+const getInitials = (name = "") =>
   name
-    .split(' ')
+    .split(" ")
     .map((part) => part[0])
     .splice(0, 2)
-    .join('')
-    .toUpperCase()
+    .join("")
+    .toUpperCase();
