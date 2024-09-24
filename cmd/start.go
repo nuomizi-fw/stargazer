@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -12,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/middleware"
-	"github.com/nuomizi-fw/stargazer/model"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
 	"github.com/spf13/cobra"
@@ -42,7 +38,6 @@ var startCmd = &cobra.Command{
 			}),
 			core.Module,
 			middleware.Module,
-			model.Module,
 			router.Module,
 			service.Module,
 			fx.Invoke(StartStargazer),
@@ -65,14 +60,20 @@ func StartStargazer(
 	logger core.StargazerLogger,
 	server core.StargazerServer,
 	middleware middleware.StargazerMiddlewares,
-	model model.StargazerModel,
 	router router.StargazerRouters,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			router.InitRouter()
 			middleware.InitMiddleware()
-			model.AutoMigrate()
+
+			if config.Database.Migrate {
+				logger.Info("Migrating database...")
+
+				if err := db.Schema.Create(ctx); err != nil {
+					logger.Panic("Failed to migrate database: %s", zap.Error(err))
+				}
+			}
 
 			go func() {
 				if config.Server.TLS.Enabled {
@@ -85,6 +86,7 @@ func StartStargazer(
 					}
 				}
 			}()
+
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
