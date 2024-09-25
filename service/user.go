@@ -1,3 +1,4 @@
+//go:generate moq -pkg service_test -out user_test.go . UserService
 package service
 
 import "github.com/nuomizi-fw/stargazer/core"
