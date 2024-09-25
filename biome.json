@@ -20,6 +20,11 @@
     "indentWidth": 2
   },
   "files": {
-    "ignore": ["node_modules", "apps/server", "crates/*"]
+    "ignore": [
+      "node_modules",
+      "apps/server",
+      "crates/*",
+      "web/src/components/ui"
+    ]
   }
 }

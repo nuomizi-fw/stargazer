@@ -1,5 +1,8 @@
 module.exports = {
   plugins: {
-    "@pandacss/dev/postcss": {},
+    "postcss-import": {},
+    "tailwindcss/nesting": "postcss-nesting",
+    tailwindcss: {},
+    autoprefixer: {},
   },
 };

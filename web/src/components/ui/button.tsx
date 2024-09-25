@@ -1,51 +1,53 @@
-import type { JSX } from "solid-js";
-import { Show, splitProps } from "solid-js";
-import { Center, styled } from "styled-system/jsx";
-import { Spinner } from "./spinner";
-import {
-  Button as StyledButton,
-  type ButtonProps as StyledButtonProps,
-} from "./styled/button";
+import type { JSX, ValidComponent } from "solid-js"
+import { splitProps } from "solid-js"
 
-interface ButtonLoadingProps {
-  loading?: boolean;
-  loadingText?: JSX.Element;
+import * as ButtonPrimitive from "@kobalte/core/button"
+import type { PolymorphicProps } from "@kobalte/core/polymorphic"
+import type { VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
+
+import { cn } from "~/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline"
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "size-10"
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default"
+    }
+  }
+)
+
+type ButtonProps<T extends ValidComponent = "button"> = ButtonPrimitive.ButtonRootProps<T> &
+  VariantProps<typeof buttonVariants> & { class?: string | undefined; children?: JSX.Element }
+
+const Button = <T extends ValidComponent = "button">(
+  props: PolymorphicProps<T, ButtonProps<T>>
+) => {
+  const [local, others] = splitProps(props as ButtonProps, ["variant", "size", "class"])
+  return (
+    <ButtonPrimitive.Root
+      class={cn(buttonVariants({ variant: local.variant, size: local.size }), local.class)}
+      {...others}
+    />
+  )
 }
 
-export interface ButtonProps extends StyledButtonProps, ButtonLoadingProps {}
-
-export const Button = (props: ButtonProps) => {
-  const [localProps, rest] = splitProps(props, [
-    "loading",
-    "disabled",
-    "loadingText",
-    "children",
-  ]);
-  const trulyDisabled = () => localProps.loading || localProps.disabled;
-
-  return (
-    <StyledButton disabled={trulyDisabled()} {...rest}>
-      <Show
-        when={localProps.loading && !localProps.loadingText}
-        fallback={localProps.loadingText || localProps.children}
-      >
-        <>
-          <ButtonSpinner />
-          <styled.span opacity={0}>{localProps.children}</styled.span>
-        </>
-      </Show>
-    </StyledButton>
-  );
-};
-
-const ButtonSpinner = () => (
-  <Center
-    inline
-    position="absolute"
-    transform="translate(-50%, -50%)"
-    top="50%"
-    insetStart="50%"
-  >
-    <Spinner borderColor="currentColor" />
-  </Center>
-);
+export type { ButtonProps }
+export { Button, buttonVariants }

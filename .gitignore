@@ -243,9 +243,3 @@ fabric.properties
 # Stargazer specific
 stargazer.db
 stargazer.toml
-
-## Panda
-styled-system
-styled-system-studio
-
-dist/

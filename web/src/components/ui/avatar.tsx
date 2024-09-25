@@ -1,42 +1,51 @@
-import { splitProps } from "solid-js";
-import * as StyledAvatar from "./styled/avatar";
+import type { ValidComponent } from "solid-js"
+import { splitProps } from "solid-js"
 
-export interface AvatarProps extends StyledAvatar.RootProps {
-  name?: string;
-  src?: string;
+import * as ImagePrimitive from "@kobalte/core/image"
+import type { PolymorphicProps } from "@kobalte/core/polymorphic"
+
+import { cn } from "~/lib/utils"
+
+type AvatarRootProps<T extends ValidComponent = "span"> = ImagePrimitive.ImageRootProps<T> & {
+  class?: string | undefined
 }
 
-export const Avatar = (props: AvatarProps) => {
-  const [localProps, rootProps] = splitProps(props, ["name", "src"]);
-
+const Avatar = <T extends ValidComponent = "span">(
+  props: PolymorphicProps<T, AvatarRootProps<T>>
+) => {
+  const [local, others] = splitProps(props as AvatarRootProps, ["class"])
   return (
-    <StyledAvatar.Root {...rootProps}>
-      <StyledAvatar.Fallback>
-        {getInitials(localProps.name) || <UserIcon />}
-      </StyledAvatar.Fallback>
-      <StyledAvatar.Image src={localProps.src} alt={localProps.name} />
-    </StyledAvatar.Root>
-  );
-};
+    <ImagePrimitive.Root
+      class={cn("relative flex size-10 shrink-0 overflow-hidden rounded-full", local.class)}
+      {...others}
+    />
+  )
+}
 
-const UserIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-  >
-    <title>User Icon</title>
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
+type AvatarImageProps<T extends ValidComponent = "img"> = ImagePrimitive.ImageImgProps<T> & {
+  class?: string | undefined
+}
 
-const getInitials = (name = "") =>
-  name
-    .split(" ")
-    .map((part) => part[0])
-    .splice(0, 2)
-    .join("")
-    .toUpperCase();
+const AvatarImage = <T extends ValidComponent = "img">(
+  props: PolymorphicProps<T, AvatarImageProps<T>>
+) => {
+  const [local, others] = splitProps(props as AvatarImageProps, ["class"])
+  return <ImagePrimitive.Img class={cn("aspect-square size-full", local.class)} {...others} />
+}
+
+type AvatarFallbackProps<T extends ValidComponent = "span"> =
+  ImagePrimitive.ImageFallbackProps<T> & { class?: string | undefined }
+
+const AvatarFallback = <T extends ValidComponent = "span">(
+  props: PolymorphicProps<T, AvatarFallbackProps<T>>
+) => {
+  const [local, others] = splitProps(props as AvatarFallbackProps, ["class"])
+  return (
+    <ImagePrimitive.Fallback
+      class={cn("flex size-full items-center justify-center rounded-full bg-muted", local.class)}
+      {...others}
+    />
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback }
