@@ -2,7 +2,6 @@ package service
 
 import entModel "github.com/nuomizi-fw/stargazer/ent"
 
-//go:generate moq -pkg service_test -out bangumi_test.go . BangumiService
 type BangumiService interface {
 	// Bangumi operations
 	GetBangumi(id int) (*entModel.Bangumi, error)

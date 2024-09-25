@@ -5,7 +5,8 @@ import "github.com/nuomizi-fw/stargazer/core"
 type AuthService interface {
 	Register() error
 	Login() error
-	MFALogin() error
+	MFAGenerate() error
+	MFAVerify() error
 	ForgotPassword() error
 }
 
@@ -29,7 +30,11 @@ func (as *authService) Login() error {
 	return nil
 }
 
-func (as *authService) MFALogin() error {
+func (as *authService) MFAGenerate() error {
+	return nil
+}
+
+func (as *authService) MFAVerify() error {
 	return nil
 }
 

@@ -1,3 +1,14 @@
+//go:generate moq -rm -pkg mock -out mock/aria2_mock.go . Aria2Service
+//go:generate moq -rm -pkg mock -out mock/auth_mock.go . AuthService
+//go:generate moq -rm -pkg mock -out mock/bangumi_mock.go . BangumiService
+//go:generate moq -rm -pkg mock -out mock/bittorrent_mock.go . BittorrentService
+//go:generate moq -rm -pkg mock -out mock/manga_mock.go . MangaService
+//go:generate moq -rm -pkg mock -out mock/music_mock.go . MusicService
+//go:generate moq -rm -pkg mock -out mock/novel_mock.go . NovelService
+//go:generate moq -rm -pkg mock -out mock/rss_mock.go . RssService
+//go:generate moq -rm -pkg mock -out mock/search_mock.go . SearchService
+//go:generate moq -rm -pkg mock -out mock/transmission_mock.go . TransmissionService
+//go:generate moq -rm -pkg mock -out mock/user_mock.go . UserService
 package service
 
 import (

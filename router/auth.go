@@ -32,7 +32,7 @@ func (ar AuthRouter) InitRouter() {
 		auth.Post("/register", ar.Register)
 		auth.Post("/login", ar.Login)
 		auth.Post("/mfa/generate", ar.MFAGenerate)
-		auth.Post("/mfa/login", ar.MFALogin)
+		auth.Post("/mfa/verify", ar.MFAVerify)
 		auth.Post("/forgot-password", ar.ForgotPassword)
 	}
 }
@@ -49,7 +49,7 @@ func (as *AuthRouter) MFAGenerate(ctx *fiber.Ctx) error {
 	return nil
 }
 
-func (as *AuthRouter) MFALogin(ctx *fiber.Ctx) error {
+func (as *AuthRouter) MFAVerify(ctx *fiber.Ctx) error {
 	return nil
 }
 

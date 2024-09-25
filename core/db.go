@@ -4,13 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"database/sql/driver"
+	"errors"
 	"time"
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/nuomizi-fw/stargazer/ent"
 	"github.com/nuomizi-fw/stargazer/ent/hook"
-	"github.com/pkg/errors"
 	"modernc.org/sqlite"
 )
 
@@ -28,13 +28,13 @@ func (d sqliteDriver) Open(name string) (driver.Conn, error) {
 	})
 	if _, err := c.Exec("PRAGMA foreign_keys = ON;", nil); err != nil {
 		conn.Close()
-		return nil, errors.Wrap(err, "failed to enable enable foreign keys")
+		return nil, errors.New("failed to enable foreign keys")
 	}
 	return conn, nil
 }
 
 func init() {
-	sql.Register("sqlite3", sqliteDriver{Driver: &sqlite.Driver{}})
+	sql.Register(dialect.SQLite, sqliteDriver{Driver: &sqlite.Driver{}})
 }
 
 type StargazerDB struct {
@@ -42,7 +42,7 @@ type StargazerDB struct {
 }
 
 func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB {
-	dsn := "file:" + config.Database.DBFile + "?cache=shared&_fk=1&_pragma=foreign_keys(1)"
+	dsn := "file:" + config.Database.DBFile + "?cache=shared&_fk=1"
 	db, err := sql.Open(dialect.SQLite, dsn)
 	if err != nil {
 		logger.Error("Failed to open database", err)
@@ -51,6 +51,7 @@ func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(1)
 	db.SetConnMaxIdleTime(time.Second * 1000)
+	db.SetConnMaxLifetime(time.Second * 1000)
 
 	client := ent.NewClient(ent.Driver(entsql.OpenDB(dialect.SQLite, db)))
 
