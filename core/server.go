@@ -34,10 +34,7 @@ func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerSer
 	app.Use(compress.New())
 	app.Use(pprof.New())
 
-	apiGroup := app.Group("/api")
-
 	return StargazerServer{
 		App: app,
-		Api: apiGroup,
 	}
 }
