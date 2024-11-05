@@ -243,4 +243,7 @@ fabric.properties
 # Stargazer specific
 stargazer.db
 stargazer.toml
+
+# OpenApi
 oapi
+openapitools.json
