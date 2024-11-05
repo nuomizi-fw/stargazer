@@ -2,17 +2,30 @@
   "name": "stargazer",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build && tsc",
     "dev": "turbo dev",
     "lint": "biome lint --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "genrate:sdk": "openapi-generator-cli generate -g typescript-axios -i ./api/openapi.yaml -o ./generate"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.9.2"
+    "@biomejs/biome": "^1.9.2",
+    "axios": "^1.7.7"
   },
   "devDependencies": {
-    "turbo": "latest"
+    "@openapitools/openapi-generator-cli": "^2.15.3",
+    "openapi-typescript-codegen": "^0.29.0",
+    "turbo": "latest",
+    "typescript": "^5.6.3"
   },
-  "workspaces": ["docs", "web"],
-  "trustedDependencies": ["@biomejs/biome", "esbuild"]
+  "workspaces": [
+    "docs",
+    "web"
+  ],
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@nestjs/core",
+    "@openapitools/openapi-generator-cli",
+    "esbuild"
+  ]
 }

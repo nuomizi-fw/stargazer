@@ -1,60 +1,23 @@
 package router
 
 import (
+	"github.com/nuomizi-fw/stargazer/oapi"
 	"go.uber.org/fx"
 )
 
-var Module = fx.Module(
-	"router",
-	fx.Provide(
-		NewStargazerRouter,
-	),
-	// Add new router below
-	fx.Provide(
-		NewAuthRouter,
-		NewUserRouter,
-		NewAria2Router,
-		NewBittorrentRouter,
-		NewMangaRouter,
-		NewMusicRouter,
-		NewNovelRouter,
-		NewSearchRouter,
-		NewBangumiRouter,
-	),
+var (
+	Module = fx.Module(
+		"router",
+		fx.Provide(
+			NewStargazerRouter,
+		),
+	)
+
+	_ oapi.ServerInterface = (*StargazerRouter)(nil)
 )
 
-type StargazerRouter interface {
-	InitRouter()
-}
+type StargazerRouter struct{}
 
-type StargazerRouters []StargazerRouter
-
-func (sr StargazerRouters) InitRouter() {
-	for _, router := range sr {
-		router.InitRouter()
-	}
-}
-
-func NewStargazerRouter(
-	authRouter AuthRouter,
-	userRouter UserRouter,
-	aria2Router Aria2Router,
-	bittorrentRouter BittorrentRouter,
-	mangaRouter MangaRouter,
-	musicRouter MusicRouter,
-	novelRouter NovelRouter,
-	searchRouter SearchRouter,
-	bangumiRouter BangumiRouter,
-) StargazerRouters {
-	return StargazerRouters{
-		authRouter,
-		userRouter,
-		aria2Router,
-		bittorrentRouter,
-		mangaRouter,
-		musicRouter,
-		novelRouter,
-		searchRouter,
-		bangumiRouter,
-	}
+func NewStargazerRouter() StargazerRouter {
+	return StargazerRouter{}
 }

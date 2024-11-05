@@ -1,0 +1,179 @@
+openapi: 3.0.0
+
+info:
+  title: Stargazer API
+  version: v1.0.0
+  description: Stargazer API Reference
+
+servers:
+  - url: /
+    description: Stargazer API
+
+security:
+  - access_token: []
+
+paths:
+  /ping:
+    get:
+      summary: Ping
+      description: Check if the server is alive
+      operationId: ping
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseOK"
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+components:
+  securitySchemes:
+    access_token:
+      type: apiKey
+      in: header
+      name: Authorization
+  responses:
+    ResponseOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponse"
+
+    ResponseStringOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseString"
+
+    ResponseNumberOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseNumber"
+
+    ResponseIntegerOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseInteger"
+
+    ResponseBooleanOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseBoolean"
+
+    ResponseInterfaceOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseInterface"
+
+    ResponseArrayOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponseArray"
+
+    # 400
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+    # 401
+    ResponseUnauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+    # 404
+    ResponseNotFoundError:
+      description: Not found error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+    # 500
+    ResponseInternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+  schemas:
+    BaseResponse:
+      properties:
+        message:
+          readOnly: true
+          description: message returned by server side if there is any
+          type: string
+          example: ""
+
+    SuccessResponse:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              anyOf:
+                - type: string
+                - type: number
+                - type: integer
+                - type: boolean
+                - type: object
+                - type: array
+                  items: {}
+
+    SuccessResponseString:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: string
+
+    SuccessResponseNumber:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: number
+
+    SuccessResponseInteger:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: integer
+
+    SuccessResponseBoolean:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: boolean
+
+    SuccessResponseInterface:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: object
+
+    SuccessResponseArray:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - properties:
+            data:
+              type: array
+              items: {}
