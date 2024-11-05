@@ -1,6 +1,10 @@
 package service
 
-import "github.com/nuomizi-fw/stargazer/core"
+import (
+	"sync"
+
+	"github.com/nuomizi-fw/stargazer/core"
+)
 
 type UserService interface {
 	GetUser() error
@@ -12,6 +16,8 @@ type UserService interface {
 	ResetPassword() error
 	RefreshToken() error
 }
+
+var UserRegisterHash = sync.Map{}
 
 type userService struct {
 	db     core.StargazerDB

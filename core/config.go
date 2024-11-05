@@ -14,12 +14,6 @@ type Server struct {
 		CertFile string `mapstructure:"cert_file"`
 		KeyFile  string `mapstructure:"key_file"`
 	}
-	Cors struct {
-		Enabled bool
-	}
-	JWT struct {
-		Secret string
-	}
 }
 
 type Database struct {
@@ -62,16 +56,6 @@ func defaultStargazerConfig() StargazerConfig {
 				Enabled:  false,
 				CertFile: "",
 				KeyFile:  "",
-			},
-			Cors: struct {
-				Enabled bool
-			}{
-				Enabled: true,
-			},
-			JWT: struct {
-				Secret string
-			}{
-				Secret: "stargazer",
 			},
 		},
 		Database: Database{
