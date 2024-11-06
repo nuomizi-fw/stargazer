@@ -12,12 +12,110 @@ servers:
 security:
   - access_token: []
 
+tags:
+  # Ping: Used for health check and service status monitoring
+  - name: Ping
+    description: |-
+      Service health check and online status monitoring
+
+  # User: Handles user authentication, authorization and preferences
+  - name: User
+    description: |-
+      User registration, login, permissions control, personal preferences
+
+  # Downloader: Manages various download clients and tasks
+  - name: Downloader
+    description: |-
+      QB/Aria2/Transmission client setup, status monitoring, task control
+
+  # Uploader: Handles local file uploads and management
+  - name: Uploader
+    description: |-
+      Local media file upload, resume support, file management
+
+  # Organization: Controls media file organization and structure
+  - name: Organization
+    description: |-
+      File renaming, auto-categorization, hard/soft link management
+
+  # Library: Manages media libraries and their settings
+  - name: Library
+    description: |-
+      Media library creation, scanning, monitoring, category management
+
+  # Content: Handles all media content operations
+  - name: Content
+    description: |-
+      Video/Comics/Music/Novel content management, playback, reading
+
+  # Metadata: Controls metadata scraping and management
+  - name: Metadata
+    description: |-
+      TMDB/Bangumi metadata scraping, matching, editing
+
+  # Notification: Manages system notifications and alerts
+  - name: Notification
+    description: |-
+      Multi-channel notifications for downloads, updates, system alerts
+
+  # Setting: Controls system-wide settings
+  - name: Setting
+    description: |-
+      System configuration, storage settings, network settings, security settings
+
+  # System: Handles core system operations
+  - name: System
+    description: |-
+      System status monitoring, log management, backup/restore, updates
+
+  # Task: Manages background task queue
+  - name: Task
+    description: |-
+      Queue management for downloads, scraping, and transcoding tasks
+
+  # Transcoding: Controls media transcoding operations
+  - name: Transcoding
+    description: |-
+      Video transcoding, subtitle embedding, audio conversion, format adaptation
+
+  # Progress: Tracks user progress across media
+  - name: Progress
+    description: |-
+      Watch history, playback progress, reading position tracking and sync
+
+  # RSS: Manages RSS feed subscriptions
+  - name: RSS
+    description: |-
+      RSS feed management, auto-download, update checks, filter rules
+
+  # Search: Handles search functionality
+  - name: Search
+    description: |-
+      Full-text search, advanced filtering, smart recommendations, related content
+
+  # Rule: Manages automation rules
+  - name: Rule
+    description: |-
+      Download rules, rename rules, categorization rules, subscription rules
+
+  # Device: Handles device management and sync
+  - name: Device
+    description: |-
+      Device registration, authentication, data sync, offline management
+
+  # Webhook: Manages external service integrations
+  - name: Webhook
+    description: |-
+      Third-party service integration, webhook configuration, event triggers
+
 paths:
   /ping:
     get:
+      operationId: ping
+      tags:
+        - Ping
       summary: Ping
       description: Check if the server is alive
-      operationId: ping
       responses:
         "200":
           $ref: "#/components/responses/ResponseOK"

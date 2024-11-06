@@ -14,11 +14,13 @@ import (
 	"syscall"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/oapi"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
+	middleware "github.com/oapi-codegen/fiber-middleware"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
@@ -84,9 +86,12 @@ func StartStargazer(
 				logger.Panic("Failed to get swagger: %s", zap.Error(err))
 			}
 
-			oapi.RegisterHandlers(server.App, router)
-
+			server.App.Use(middleware.OapiRequestValidatorWithOptions(swagger, &middleware.Options{
+				Options: openapi3filter.Options{AuthenticationFunc: openapi3filter.NoopAuthenticationFunc},
+			}))
 			server.App.Use(adaptor.HTTPHandler(NewDocsRouter(swagger, docHTML, docYAML)))
+
+			oapi.RegisterHandlers(server.App, router)
 
 			go func() {
 				if config.Server.TLS.Enabled {
