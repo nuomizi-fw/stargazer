@@ -6,9 +6,11 @@ import (
 )
 
 type Server struct {
+	Host    string
 	Port    string
 	Debug   bool
 	Prefork bool
+	Secret  string
 	TLS     struct {
 		Enabled  bool   `mapstructure:"enabled"`
 		CertFile string `mapstructure:"cert_file"`
@@ -45,9 +47,11 @@ type StargazerConfig struct {
 func defaultStargazerConfig() StargazerConfig {
 	return StargazerConfig{
 		Server: Server{
+			Host:    "localhost",
 			Port:    "11451",
 			Debug:   true,
 			Prefork: false,
+			Secret:  "",
 			TLS: struct {
 				Enabled  bool   `mapstructure:"enabled"`
 				CertFile string `mapstructure:"cert_file"`

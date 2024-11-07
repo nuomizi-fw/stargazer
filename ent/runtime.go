@@ -2,84 +2,8 @@
 
 package ent
 
-import (
-	"github.com/nuomizi-fw/stargazer/ent/bangumi"
-	"github.com/nuomizi-fw/stargazer/ent/castmember"
-	"github.com/nuomizi-fw/stargazer/ent/episode"
-	"github.com/nuomizi-fw/stargazer/ent/schema"
-	"github.com/nuomizi-fw/stargazer/ent/season"
-)
-
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	bangumiFields := schema.Bangumi{}.Fields()
-	_ = bangumiFields
-	// bangumiDescTitle is the schema descriptor for title field.
-	bangumiDescTitle := bangumiFields[1].Descriptor()
-	// bangumi.TitleValidator is a validator for the "title" field. It is called by the builders before save.
-	bangumi.TitleValidator = bangumiDescTitle.Validators[0].(func(string) error)
-	// bangumiDescType is the schema descriptor for type field.
-	bangumiDescType := bangumiFields[4].Descriptor()
-	// bangumi.TypeValidator is a validator for the "type" field. It is called by the builders before save.
-	bangumi.TypeValidator = bangumiDescType.Validators[0].(func(string) error)
-	// bangumiDescStatus is the schema descriptor for status field.
-	bangumiDescStatus := bangumiFields[5].Descriptor()
-	// bangumi.StatusValidator is a validator for the "status" field. It is called by the builders before save.
-	bangumi.StatusValidator = bangumiDescStatus.Validators[0].(func(string) error)
-	// bangumiDescID is the schema descriptor for id field.
-	bangumiDescID := bangumiFields[0].Descriptor()
-	// bangumi.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	bangumi.IDValidator = bangumiDescID.Validators[0].(func(int) error)
-	castmemberFields := schema.CastMember{}.Fields()
-	_ = castmemberFields
-	// castmemberDescName is the schema descriptor for name field.
-	castmemberDescName := castmemberFields[1].Descriptor()
-	// castmember.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	castmember.NameValidator = castmemberDescName.Validators[0].(func(string) error)
-	// castmemberDescSeasonID is the schema descriptor for season_id field.
-	castmemberDescSeasonID := castmemberFields[4].Descriptor()
-	// castmember.SeasonIDValidator is a validator for the "season_id" field. It is called by the builders before save.
-	castmember.SeasonIDValidator = castmemberDescSeasonID.Validators[0].(func(int) error)
-	// castmemberDescID is the schema descriptor for id field.
-	castmemberDescID := castmemberFields[0].Descriptor()
-	// castmember.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	castmember.IDValidator = castmemberDescID.Validators[0].(func(int) error)
-	episodeFields := schema.Episode{}.Fields()
-	_ = episodeFields
-	// episodeDescEpisodeNumber is the schema descriptor for episode_number field.
-	episodeDescEpisodeNumber := episodeFields[1].Descriptor()
-	// episode.EpisodeNumberValidator is a validator for the "episode_number" field. It is called by the builders before save.
-	episode.EpisodeNumberValidator = episodeDescEpisodeNumber.Validators[0].(func(int) error)
-	// episodeDescTitle is the schema descriptor for title field.
-	episodeDescTitle := episodeFields[2].Descriptor()
-	// episode.TitleValidator is a validator for the "title" field. It is called by the builders before save.
-	episode.TitleValidator = episodeDescTitle.Validators[0].(func(string) error)
-	// episodeDescSeasonID is the schema descriptor for season_id field.
-	episodeDescSeasonID := episodeFields[5].Descriptor()
-	// episode.SeasonIDValidator is a validator for the "season_id" field. It is called by the builders before save.
-	episode.SeasonIDValidator = episodeDescSeasonID.Validators[0].(func(int) error)
-	// episodeDescID is the schema descriptor for id field.
-	episodeDescID := episodeFields[0].Descriptor()
-	// episode.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	episode.IDValidator = episodeDescID.Validators[0].(func(int) error)
-	seasonFields := schema.Season{}.Fields()
-	_ = seasonFields
-	// seasonDescSeasonNumber is the schema descriptor for season_number field.
-	seasonDescSeasonNumber := seasonFields[1].Descriptor()
-	// season.SeasonNumberValidator is a validator for the "season_number" field. It is called by the builders before save.
-	season.SeasonNumberValidator = seasonDescSeasonNumber.Validators[0].(func(int) error)
-	// seasonDescEpisodeCount is the schema descriptor for episode_count field.
-	seasonDescEpisodeCount := seasonFields[3].Descriptor()
-	// season.EpisodeCountValidator is a validator for the "episode_count" field. It is called by the builders before save.
-	season.EpisodeCountValidator = seasonDescEpisodeCount.Validators[0].(func(int) error)
-	// seasonDescBangumiID is the schema descriptor for bangumi_id field.
-	seasonDescBangumiID := seasonFields[4].Descriptor()
-	// season.BangumiIDValidator is a validator for the "bangumi_id" field. It is called by the builders before save.
-	season.BangumiIDValidator = seasonDescBangumiID.Validators[0].(func(int) error)
-	// seasonDescID is the schema descriptor for id field.
-	seasonDescID := seasonFields[0].Descriptor()
-	// season.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	season.IDValidator = seasonDescID.Validators[0].(func(int) error)
 }

@@ -20,15 +20,13 @@ type UserService interface {
 var UserRegisterHash = sync.Map{}
 
 type userService struct {
-	db     core.StargazerDB
-	logger core.StargazerLogger
+	db core.StargazerDB
 }
 
 func NewUserService(
 	db core.StargazerDB,
-	logger core.StargazerLogger,
 ) UserService {
-	return &userService{db, logger}
+	return &userService{db}
 }
 
 func (us *userService) GetUser() error {

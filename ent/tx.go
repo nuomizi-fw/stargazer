@@ -12,14 +12,6 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// Bangumi is the client for interacting with the Bangumi builders.
-	Bangumi *BangumiClient
-	// CastMember is the client for interacting with the CastMember builders.
-	CastMember *CastMemberClient
-	// Episode is the client for interacting with the Episode builders.
-	Episode *EpisodeClient
-	// Season is the client for interacting with the Season builders.
-	Season *SeasonClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -153,10 +145,6 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.Bangumi = NewBangumiClient(tx.config)
-	tx.CastMember = NewCastMemberClient(tx.config)
-	tx.Episode = NewEpisodeClient(tx.config)
-	tx.Season = NewSeasonClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 
@@ -167,7 +155,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Bangumi.QueryXXX(), the query will be executed
+// applies a query, for example: User.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

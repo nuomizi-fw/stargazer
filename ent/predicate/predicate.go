@@ -6,17 +6,5 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Bangumi is the predicate function for bangumi builders.
-type Bangumi func(*sql.Selector)
-
-// CastMember is the predicate function for castmember builders.
-type CastMember func(*sql.Selector)
-
-// Episode is the predicate function for episode builders.
-type Episode func(*sql.Selector)
-
-// Season is the predicate function for season builders.
-type Season func(*sql.Selector)
-
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

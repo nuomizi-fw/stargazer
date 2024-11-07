@@ -12,10 +12,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/nuomizi-fw/stargazer/ent/bangumi"
-	"github.com/nuomizi-fw/stargazer/ent/castmember"
-	"github.com/nuomizi-fw/stargazer/ent/episode"
-	"github.com/nuomizi-fw/stargazer/ent/season"
 	"github.com/nuomizi-fw/stargazer/ent/user"
 )
 
@@ -77,11 +73,7 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			bangumi.Table:    bangumi.ValidColumn,
-			castmember.Table: castmember.ValidColumn,
-			episode.Table:    episode.ValidColumn,
-			season.Table:     season.ValidColumn,
-			user.Table:       user.ValidColumn,
+			user.Table: user.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

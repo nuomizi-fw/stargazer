@@ -9,54 +9,6 @@ import (
 	"github.com/nuomizi-fw/stargazer/ent"
 )
 
-// The BangumiFunc type is an adapter to allow the use of ordinary
-// function as Bangumi mutator.
-type BangumiFunc func(context.Context, *ent.BangumiMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f BangumiFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.BangumiMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BangumiMutation", m)
-}
-
-// The CastMemberFunc type is an adapter to allow the use of ordinary
-// function as CastMember mutator.
-type CastMemberFunc func(context.Context, *ent.CastMemberMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f CastMemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CastMemberMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CastMemberMutation", m)
-}
-
-// The EpisodeFunc type is an adapter to allow the use of ordinary
-// function as Episode mutator.
-type EpisodeFunc func(context.Context, *ent.EpisodeMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f EpisodeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.EpisodeMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EpisodeMutation", m)
-}
-
-// The SeasonFunc type is an adapter to allow the use of ordinary
-// function as Season mutator.
-type SeasonFunc func(context.Context, *ent.SeasonMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f SeasonFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.SeasonMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SeasonMutation", m)
-}
-
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
