@@ -80,20 +80,7 @@ func NewStargazerRouter(
 
 			return c.Next()
 		},
-		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			return fiber.NewError(fiber.StatusUnauthorized, "Invalid or expired token")
-		},
 		TokenLookup: "header:Authorization,query:token",
-		AuthScheme:  "Bearer",
-		KeyFunc: func(t *jwt.Token) (interface{}, error) {
-			if _, ok := t.Method.(*jwt.SigningMethodECDSA); !ok {
-				return nil, fiber.ErrUnauthorized
-			}
-
-			_, publicKey := service.User.GetKeyPair()
-			return publicKey, nil
-		},
-		JWKSetURLs: []string{sjwt.JWKSPath},
 	}))
 
 	oapi.RegisterHandlers(server.App, router)
