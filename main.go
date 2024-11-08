@@ -83,9 +83,6 @@ func StartStargazer(
 			if err != nil {
 				logger.Panic("Failed to get swagger: %s", zap.Error(err))
 			}
-
-			oapi.RegisterHandlers(server.App, router)
-
 			server.App.Use(adaptor.HTTPHandler(NewDocsRouter(swagger, docHTML, docYAML)))
 
 			go func() {

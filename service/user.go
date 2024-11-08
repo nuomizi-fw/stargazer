@@ -1,9 +1,12 @@
 package service
 
 import (
+	"crypto/ecdsa"
 	"sync"
 
 	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/pkg/jwt"
+	"github.com/nuomizi-fw/stargazer/pkg/logger"
 )
 
 type UserService interface {
@@ -15,18 +18,32 @@ type UserService interface {
 	SetUserRole() error
 	ResetPassword() error
 	RefreshToken() error
+	GetKeyPair() (*ecdsa.PrivateKey, *ecdsa.PublicKey)
 }
 
 var UserRegisterHash = sync.Map{}
 
 type userService struct {
+	privateKey *ecdsa.PrivateKey
+	publicKey  *ecdsa.PublicKey
+
 	db core.StargazerDB
 }
 
 func NewUserService(
 	db core.StargazerDB,
 ) UserService {
-	return &userService{db}
+	privateKey, publicKey, err := jwt.GenerateKeyPair()
+	if err != nil {
+		logger.Errorf("Failed to generate key pair: %s", err)
+		return nil
+	}
+
+	return &userService{
+		privateKey: privateKey,
+		publicKey:  publicKey,
+		db:         db,
+	}
 }
 
 func (us *userService) GetUser() error {
@@ -59,4 +76,8 @@ func (us *userService) ResetPassword() error {
 
 func (ur *userService) RefreshToken() error {
 	return nil
+}
+
+func (u *userService) GetKeyPair() (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
+	return u.privateKey, u.publicKey
 }

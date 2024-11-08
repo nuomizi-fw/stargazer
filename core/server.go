@@ -5,7 +5,6 @@ import (
 	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
-	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
@@ -32,7 +31,6 @@ func NewStargazerServer(config StargazerConfig, sl StargazerLogger) StargazerSer
 	}))
 	app.Use(recover.New())
 	app.Use(compress.New())
-	app.Use(pprof.New())
 
 	return StargazerServer{
 		App: app,

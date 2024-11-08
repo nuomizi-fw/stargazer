@@ -4,6 +4,7 @@
 package mock
 
 import (
+	"crypto/ecdsa"
 	"github.com/nuomizi-fw/stargazer/service"
 	"sync"
 )
@@ -23,6 +24,9 @@ var _ service.UserService = &UserServiceMock{}
 //			},
 //			DeleteUserFunc: func() error {
 //				panic("mock out the DeleteUser method")
+//			},
+//			GetKeyPairFunc: func() (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
+//				panic("mock out the GetKeyPair method")
 //			},
 //			GetUserFunc: func() error {
 //				panic("mock out the GetUser method")
@@ -55,6 +59,9 @@ type UserServiceMock struct {
 	// DeleteUserFunc mocks the DeleteUser method.
 	DeleteUserFunc func() error
 
+	// GetKeyPairFunc mocks the GetKeyPair method.
+	GetKeyPairFunc func() (*ecdsa.PrivateKey, *ecdsa.PublicKey)
+
 	// GetUserFunc mocks the GetUser method.
 	GetUserFunc func() error
 
@@ -81,6 +88,9 @@ type UserServiceMock struct {
 		// DeleteUser holds details about calls to the DeleteUser method.
 		DeleteUser []struct {
 		}
+		// GetKeyPair holds details about calls to the GetKeyPair method.
+		GetKeyPair []struct {
+		}
 		// GetUser holds details about calls to the GetUser method.
 		GetUser []struct {
 		}
@@ -102,6 +112,7 @@ type UserServiceMock struct {
 	}
 	lockCreateUser    sync.RWMutex
 	lockDeleteUser    sync.RWMutex
+	lockGetKeyPair    sync.RWMutex
 	lockGetUser       sync.RWMutex
 	lockGetUsers      sync.RWMutex
 	lockRefreshToken  sync.RWMutex
@@ -161,6 +172,33 @@ func (mock *UserServiceMock) DeleteUserCalls() []struct {
 	mock.lockDeleteUser.RLock()
 	calls = mock.calls.DeleteUser
 	mock.lockDeleteUser.RUnlock()
+	return calls
+}
+
+// GetKeyPair calls GetKeyPairFunc.
+func (mock *UserServiceMock) GetKeyPair() (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
+	if mock.GetKeyPairFunc == nil {
+		panic("UserServiceMock.GetKeyPairFunc: method is nil but UserService.GetKeyPair was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockGetKeyPair.Lock()
+	mock.calls.GetKeyPair = append(mock.calls.GetKeyPair, callInfo)
+	mock.lockGetKeyPair.Unlock()
+	return mock.GetKeyPairFunc()
+}
+
+// GetKeyPairCalls gets all the calls that were made to GetKeyPair.
+// Check the length with:
+//
+//	len(mockedUserService.GetKeyPairCalls())
+func (mock *UserServiceMock) GetKeyPairCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockGetKeyPair.RLock()
+	calls = mock.calls.GetKeyPair
+	mock.lockGetKeyPair.RUnlock()
 	return calls
 }
 
