@@ -4,7 +4,6 @@ import (
 	"crypto/ecdsa"
 	"sync"
 
-	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
 	"github.com/nuomizi-fw/stargazer/pkg/logger"
 	"github.com/nuomizi-fw/stargazer/repository"
