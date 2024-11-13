@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/oapi"
+	"github.com/nuomizi-fw/stargazer/repository"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
 	"go.uber.org/fx"
@@ -49,6 +50,7 @@ func main() {
 		core.Module,
 		router.Module,
 		service.Module,
+		repository.Module,
 		fx.Invoke(StartStargazer),
 	)
 

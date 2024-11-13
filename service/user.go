@@ -7,6 +7,7 @@ import (
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
 	"github.com/nuomizi-fw/stargazer/pkg/logger"
+	"github.com/nuomizi-fw/stargazer/repository"
 )
 
 type UserService interface {
@@ -27,11 +28,11 @@ type userService struct {
 	privateKey *ecdsa.PrivateKey
 	publicKey  *ecdsa.PublicKey
 
-	db core.StargazerDB
+	repo repository.Repository
 }
 
 func NewUserService(
-	db core.StargazerDB,
+	repo repository.Repository,
 ) UserService {
 	privateKey, publicKey, err := jwt.GenerateKeyPair()
 	if err != nil {
@@ -42,7 +43,7 @@ func NewUserService(
 	return &userService{
 		privateKey: privateKey,
 		publicKey:  publicKey,
-		db:         db,
+		repo:       repo,
 	}
 }
 
