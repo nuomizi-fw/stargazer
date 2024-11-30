@@ -30,8 +30,6 @@ export default function App() {
           <ColorModeProvider storageManager={storageManager}>
             <MetaProvider>
               <Title>Stargazer</Title>
-              <a href="/">Index</a>
-              <a href="/about">About</a>
               <Suspense>{props.children}</Suspense>
             </MetaProvider>
           </ColorModeProvider>

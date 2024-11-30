@@ -13,85 +13,86 @@ security:
   - access_token: []
 
 tags:
-  # Ping: Used for health check and service status monitoring
+  # Ping: Basic system health check
   - name: Ping
-    description: Service health check and online status monitoring
+    description: Service health check, server status monitoring, and API version info
 
-  # User: Handles user authentication, authorization and preferences
-  - name: User
-    description: User registration, login, permissions control, personal preferences
+  # Auth: Authentication and user management
+  - name: Auth
+    description: User authentication, API keys, server sharing, managed users, SSO integration
 
-  # Downloader: Manages various download clients and tasks
-  - name: Downloader
-    description: QB/Aria2/Transmission client setup, status monitoring, task control
+  # Media: Core media management
+  - name: Media
+    description: Library management, media scanning, metadata agents, collections, playlists
 
-  # Uploader: Handles local file uploads and management
-  - name: Uploader
-    description: Local media file upload, resume support, file management
+  # Storage: Network storage management
+  - name: Storage
+    description: WebDAV/Samba mounts, network shares, storage pools, path management
 
-  # Organization: Controls media file organization and structure
-  - name: Organization
-    description: File renaming, auto-categorization, hard/soft link management
+  # Manga: Manga/Comics management
+  - name: Manga
+    description: Manga library, chapter tracking, reading direction, collection organization
 
-  # Library: Manages media libraries and their settings
-  - name: Library
-    description: Media library creation, scanning, monitoring, category management
+  # Novel: Light novel and book management
+  - name: Novel
+    description: Ebook library, reading progress, format conversion, series organization
 
-  # Content: Handles all media content operations
-  - name: Content
-    description: Video/Comics/Music/Novel content management, playback, reading
+  # Music: Audio library management
+  - name: Music
+    description: Music library, artist/album organization, playlist management, lyrics
 
-  # Metadata: Controls metadata scraping and management
+  # Scanner: Media detection and organization
+  - name: Scanner
+    description: Automated media detection, file monitoring, library updates, naming scheme
+
+  # Metadata: Enhanced metadata management
   - name: Metadata
-    description: TMDB/Bangumi metadata scraping, matching, editing
+    description: TMDB/AniList/MangaDex/Audible integration, metadata editing, bulk updates
 
-  # Notification: Manages system notifications and alerts
+  # Streaming: Media streaming and transcoding
+  - name: Streaming
+    description: Direct play, transcoding profiles, subtitle handling, bandwidth management
+
+  # Sync: Device synchronization
+  - name: Sync
+    description: Offline sync, progress sync across devices, watch state synchronization
+
+  # Download: Download management
+  - name: Download
+    description: Download clients (QB/Aria2), queue management, automation rules
+
+  # Notification: System notifications
   - name: Notification
-    description: Multi-channel notifications for downloads, updates, system alerts
+    description: Push notifications, email alerts, webhook integration, activity feed
 
-  # Setting: Controls system-wide settings
-  - name: Setting
-    description: System configuration, storage settings, network settings, security settings
+  # Settings: System configuration
+  - name: Settings
+    description: Server settings, library preferences, networking, storage management
 
-  # System: Handles core system operations
+  # System: Core system operations
   - name: System
-    description: System status monitoring, log management, backup/restore, updates
+    description: Server maintenance, backups, updates, performance monitoring
 
-  # Task: Manages background task queue
-  - name: Task
-    description: Queue management for downloads, scraping, and transcoding tasks
-
-  # Transcoding: Controls media transcoding operations
-  - name: Transcoding
-    description: Video transcoding, subtitle embedding, audio conversion, format adaptation
-
-  # Progress: Tracks user progress across media
-  - name: Progress
-    description: Watch history, playback progress, reading position tracking and sync
-
-  # RSS: Manages RSS feed subscriptions
-  - name: RSS
-    description: RSS feed management, auto-download, update checks, filter rules
-
-  # Search: Handles search functionality
+  # Search: Advanced search capabilities
   - name: Search
-    description: Full-text search, advanced filtering, smart recommendations, related content
+    description: Full-text search, fuzzy matching, advanced filters, recommendations
 
-  # Rule: Manages automation rules
-  - name: Rule
-    description: Download rules, rename rules, categorization rules, subscription rules
+  # Sharing: Content sharing
+  - name: Sharing
+    description: User invites, library sharing, access controls, shared playlists
 
-  # Device: Handles device management and sync
-  - name: Device
-    description: Device registration, authentication, data sync, offline management
+  # Analytics: Usage statistics
+  - name: Analytics
+    description: Media statistics, user activity, library insights, watch time tracking
 
-  # Webhook: Manages external service integrations
-  - name: Webhook
-    description: Third-party service integration, webhook configuration, event triggers
+  # User: User management
+  - name: User
+    description: User management, permissions, roles, user profiles
 
 paths:
   /ping:
     get:
+      tags: [Ping]
       summary: Ping
       description: Check if the server is alive
       operationId: ping
@@ -101,19 +102,69 @@ paths:
         "500":
           $ref: "#/components/responses/ResponseInternalServerError"
 
-  #
-  # User
-  #
-  /user:
-    get:
-      summary: Get user info
-      description: Get user info
-      operationId: getUserInfo
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: User Registration
+      description: Register a new user account
+      operationId: register
+      requestBody:
+        $ref: "#/components/requestBodies/RegisterRequest"
       responses:
         "200":
-          $ref: "#/components/responses/ResponseOK"
+          $ref: "#/components/responses/GetRegisterResponseOK"
         "400":
           $ref: "#/components/responses/ResponseBadRequest"
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: User Login
+      description: Authenticate user and get access token
+      operationId: login
+      requestBody:
+        $ref: "#/components/requestBodies/LoginRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/GetLoginResponseOK"
+        "400":
+          $ref: "#/components/responses/ResponseBadRequest"
+        "401":
+          $ref: "#/components/responses/ResponseUnauthorized"
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh Access Token
+      description: Refresh access token
+      operationId: refresh
+      requestBody:
+        $ref: "#/components/requestBodies/RefreshTokenRequest"
+      security:
+        - refresh_token: []
+      responses:
+        "200":
+          $ref: "#/components/responses/PostRefreshTokenResponseOK"
+        "401":
+          $ref: "#/components/responses/ResponseUnauthorized"
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+  /user/profile:
+    get:
+      tags: [User]
+      summary: Get User Profile
+      description: Get current user's profile information
+      operationId: getUserProfile
+      security:
+        - access_token: []
+      responses:
+        "200":
+          $ref: "#/components/responses/GetUserProfileResponseOK"
         "401":
           $ref: "#/components/responses/ResponseUnauthorized"
         "404":
@@ -124,60 +175,129 @@ paths:
 components:
   securitySchemes:
     access_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from login
+    refresh_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT refresh token for obtaining new access tokens
+    api_key:
       type: apiKey
       in: header
-      name: Authorization
+      name: X-API-Key
+      description: API key for service-to-service authentication
+
+  requestBodies:
+    LoginRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - username
+              - password
+            properties:
+              username:
+                type: string
+                example: "johndoe"
+              password:
+                type: string
+                format: password
+                example: "your-secure-password"
+
+    RegisterRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - username
+              - password
+              - email
+            properties:
+              username:
+                type: string
+                example: "johndoe"
+              password:
+                type: string
+                format: password
+                example: "your-secure-password"
+              email:
+                type: string
+                format: email
+                example: "john@example.com"
+              display_name:
+                type: string
+                example: "John Doe"
+
+    RefreshTokenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - refresh_token
+            properties:
+              refresh_token:
+                type: string
+
   responses:
     ResponseOK:
       description: OK
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/SuccessResponse"
+            $ref: "#/components/schemas/BaseResponse"
 
     ResponseStringOK:
-      description: OK
+      description: String response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseString"
 
     ResponseNumberOK:
-      description: OK
+      description: Number response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseNumber"
 
     ResponseIntegerOK:
-      description: OK
+      description: Integer response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseInteger"
 
     ResponseBooleanOK:
-      description: OK
+      description: Boolean response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseBoolean"
 
     ResponseInterfaceOK:
-      description: OK
+      description: Interface response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseInterface"
 
     ResponseArrayOK:
-      description: OK
+      description: Array response
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SuccessResponseArray"
 
-    # 400
+    # Error Responses
     ResponseBadRequest:
       description: Bad Request
       content:
@@ -185,7 +305,6 @@ components:
           schema:
             $ref: "#/components/schemas/BaseResponse"
 
-    # 401
     ResponseUnauthorized:
       description: Unauthorized
       content:
@@ -193,21 +312,69 @@ components:
           schema:
             $ref: "#/components/schemas/BaseResponse"
 
-    # 404
     ResponseNotFoundError:
-      description: Not found error
+      description: Not Found Error
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/BaseResponse"
 
-    # 500
     ResponseInternalServerError:
       description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/BaseResponse"
+
+    GetLoginResponseOK:
+      description: Login successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIs..."
+              token_type:
+                type: string
+                example: "Bearer"
+              expires_in:
+                type: integer
+                example: 3600
+              user:
+                $ref: "#/components/schemas/User"
+
+    GetRegisterResponseOK:
+      description: Registration successful
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+
+    PostRefreshTokenResponseOK:
+      description: Refresh token successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIs..."
+              refresh_token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIs..."
+              expires_in:
+                type: integer
+                example: 3600
+
+    GetUserProfileResponseOK:
+      description: User profile retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
 
   schemas:
     BaseResponse:
@@ -231,6 +398,7 @@ components:
                 - type: object
                 - type: array
                   items: {}
+              example: {}
 
     SuccessResponseString:
       allOf:
@@ -238,6 +406,7 @@ components:
         - properties:
             data:
               type: string
+              example: ""
 
     SuccessResponseNumber:
       allOf:
@@ -245,6 +414,7 @@ components:
         - properties:
             data:
               type: number
+              example: 0
 
     SuccessResponseInteger:
       allOf:
@@ -252,6 +422,7 @@ components:
         - properties:
             data:
               type: integer
+              example: 0
 
     SuccessResponseBoolean:
       allOf:
@@ -259,6 +430,7 @@ components:
         - properties:
             data:
               type: boolean
+              example: false
 
     SuccessResponseInterface:
       allOf:
@@ -266,6 +438,7 @@ components:
         - properties:
             data:
               type: object
+              example: {}
 
     SuccessResponseArray:
       allOf:
@@ -274,3 +447,40 @@ components:
             data:
               type: array
               items: {}
+              example: []
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        display_name:
+          type: string
+          example: "John Doe"
+        avatar:
+          type: string
+          example: "https://example.com/avatar.jpg"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T12:00:00Z"
+        role:
+          type: string
+          enum: [admin, user]
+          example: "user"
+        status:
+          type: string
+          enum: [active, inactive, banned]
+          example: "active"

@@ -2,7 +2,7 @@
   "name": "@stargazer/web",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "vinxi dev --host",
     "build": "vinxi build",
     "start": "vinxi start",
     "version": "vinxi version",

@@ -26,7 +26,7 @@ type JWKS struct {
 	Keys []JWK `json:"keys"`
 }
 
-const JWKSPath = ".well-known/jwks.json"
+const JWKSPath = "/.well-known/jwks.json"
 
 type Claims struct {
 	Username string `json:"username"`
@@ -54,7 +54,7 @@ func GenerateToken(username string, privateKey *ecdsa.PrivateKey, id int, issuer
 func ParseToken(signedToken string, publicKeyFunc func() (*ecdsa.PublicKey, error)) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(signedToken, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, errors.New("unexpected signing method")
 		}
 		return publicKeyFunc()
 	})

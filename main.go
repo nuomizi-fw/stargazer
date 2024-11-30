@@ -87,13 +87,7 @@ func StartStargazer(
 			}
 			server.App.Use(adaptor.HTTPHandler(NewDocsRouter(swagger, docHTML, docYAML)))
 
-			go func() {
-				if config.Server.TLS.Enabled {
-					logger.Fatal(server.App.ListenTLS(config.Server.Port, config.Server.TLS.CertFile, config.Server.TLS.KeyFile))
-				} else {
-					logger.Fatal(server.App.Listen(config.Server.Port))
-				}
-			}()
+			logger.Fatal(server.App.Listen(config.Server.Port))
 
 			return nil
 		},

@@ -7,13 +7,6 @@ enable = false
 cert_file = "cert.pem"
 key_file = "key.pem"
 
-[server.cors]
-enable = true
-
-[server.jwt]
-secret = "stargazer"
-
-
 [database]
 type = "sqlite3"
 port = 0

@@ -2,7 +2,7 @@
 package service
 
 import (
-	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/repository"
 	"go.uber.org/fx"
 )
 
@@ -12,12 +12,14 @@ var Module = fx.Module(
 		fx.Provide(NewStargazerService),
 		// Add new service below
 		fx.Provide(
+			NewAuthService,
 			NewUserService,
 		),
 	),
 )
 
 type StargazerService struct {
+	Auth       AuthService
 	User       UserService
 	Rss        RssService
 	Downloader DownloaderService
@@ -25,9 +27,10 @@ type StargazerService struct {
 }
 
 func NewStargazerService(
-	db core.StargazerDB,
+	repository repository.Repository,
 ) StargazerService {
 	return StargazerService{
-		User: NewUserService(db),
+		Auth: NewAuthService(repository),
+		User: NewUserService(repository),
 	}
 }

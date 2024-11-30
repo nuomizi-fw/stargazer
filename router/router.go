@@ -28,14 +28,18 @@ var (
 	_ oapi.ServerInterface = (*StargazerRouter)(nil)
 )
 
-type StargazerRouter struct{}
+type StargazerRouter struct {
+	service.StargazerService
+}
 
 func NewStargazerRouter(
 	config core.StargazerConfig,
 	server core.StargazerServer,
 	service service.StargazerService,
 ) StargazerRouter {
-	router := StargazerRouter{}
+	router := StargazerRouter{
+		StargazerService: service,
+	}
 
 	_, publicKey := service.User.GetKeyPair()
 
@@ -44,15 +48,19 @@ func NewStargazerRouter(
 		logger.Fatalf("Failed to generate JWKS JSON: %s", err)
 	}
 
-	server.App.Use(adaptor.HTTPHandler(sjwt.JWKSHandler(jswkJSON)))
+	server.App.Get(sjwt.JWKSPath, adaptor.HTTPHandler(sjwt.JWKSHandler(jswkJSON)))
 
 	server.App.Use(jwtware.New(jwtware.Config{
 		Filter: func(c *fiber.Ctx) bool {
-			if c.IP() == "::1" || c.IP() == "127.0.0.1" {
+			if bytes.Equal(c.Request().Header.Method(), []byte("GET")) && c.Path() == "/favicon.ico" {
 				return true
 			}
 
 			if bytes.Equal(c.Request().Header.Method(), []byte("GET")) && c.Path() == "/ping" {
+				return true
+			}
+
+			if bytes.Equal(c.Request().Header.Method(), []byte("GET")) && c.Path() == "/docs/openapi.yaml" {
 				return true
 			}
 
@@ -62,13 +70,15 @@ func NewStargazerRouter(
 
 			return false
 		},
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return fiber.ErrUnauthorized
+		},
 		SuccessHandler: func(c *fiber.Ctx) error {
 			token := c.Locals("user").(*jwt.Token)
 
 			valid, claims, err := sjwt.Validate(
 				token.Raw,
 				func() (*ecdsa.PublicKey, error) {
-					_, publicKey := service.User.GetKeyPair()
 					return publicKey, nil
 				})
 			if err != nil || !valid {
@@ -81,6 +91,12 @@ func NewStargazerRouter(
 			return c.Next()
 		},
 		TokenLookup: "header:Authorization,query:token",
+		SigningKey: jwtware.SigningKey{
+			JWTAlg: jwtware.ES256,
+			Key:    publicKey,
+		},
+		AuthScheme: "Bearer",
+		ContextKey: "user",
 	}))
 
 	oapi.RegisterHandlers(server.App, router)
