@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.8",
+    "@phosphor-icons/react": "^2.1.7",
     "@react-aria/ssr": "3.9.7",
     "@react-aria/visually-hidden": "3.8.18",
     "clsx": "2.1.1",
