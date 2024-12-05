@@ -19,10 +19,6 @@ const (
 	FieldEmail = "email"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
-	FieldRefreshToken = "refresh_token"
-	// FieldRefreshTokenExpiresAt holds the string denoting the refresh_token_expires_at field in the database.
-	FieldRefreshTokenExpiresAt = "refresh_token_expires_at"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -37,8 +33,6 @@ var Columns = []string{
 	FieldUsername,
 	FieldEmail,
 	FieldPassword,
-	FieldRefreshToken,
-	FieldRefreshTokenExpiresAt,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -89,16 +83,6 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
-}
-
-// ByRefreshToken orders the results by the refresh_token field.
-func ByRefreshToken(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRefreshToken, opts...).ToFunc()
-}
-
-// ByRefreshTokenExpiresAt orders the results by the refresh_token_expires_at field.
-func ByRefreshTokenExpiresAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRefreshTokenExpiresAt, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

@@ -23,10 +23,6 @@ type User struct {
 	Email string `json:"email,omitempty"`
 	// Password holds the value of the "password" field.
 	Password string `json:"-"`
-	// RefreshToken holds the value of the "refresh_token" field.
-	RefreshToken *string `json:"refresh_token,omitempty"`
-	// RefreshTokenExpiresAt holds the value of the "refresh_token_expires_at" field.
-	RefreshTokenExpiresAt *time.Time `json:"refresh_token_expires_at,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -41,9 +37,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldEmail, user.FieldPassword, user.FieldRefreshToken:
+		case user.FieldUsername, user.FieldEmail, user.FieldPassword:
 			values[i] = new(sql.NullString)
-		case user.FieldRefreshTokenExpiresAt, user.FieldCreatedAt, user.FieldUpdatedAt:
+		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -83,20 +79,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
 			} else if value.Valid {
 				u.Password = value.String
-			}
-		case user.FieldRefreshToken:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
-			} else if value.Valid {
-				u.RefreshToken = new(string)
-				*u.RefreshToken = value.String
-			}
-		case user.FieldRefreshTokenExpiresAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field refresh_token_expires_at", values[i])
-			} else if value.Valid {
-				u.RefreshTokenExpiresAt = new(time.Time)
-				*u.RefreshTokenExpiresAt = value.Time
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -153,16 +135,6 @@ func (u *User) String() string {
 	builder.WriteString(u.Email)
 	builder.WriteString(", ")
 	builder.WriteString("password=<sensitive>")
-	builder.WriteString(", ")
-	if v := u.RefreshToken; v != nil {
-		builder.WriteString("refresh_token=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.RefreshTokenExpiresAt; v != nil {
-		builder.WriteString("refresh_token_expires_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
