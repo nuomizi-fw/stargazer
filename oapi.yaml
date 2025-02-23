@@ -1,7 +1,0 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
-package: oapi
-generate:
-  fiber-server: true
-  embedded-spec: true
-  models: true
-output: oapi/stargazer_oapi.go

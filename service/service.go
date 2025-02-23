@@ -1,7 +1,8 @@
-//go:generate moq -rm -pkg mock -out mock/user_mock.go . UserService
 package service
 
 import (
+	"github.com/nuomizi-fw/stargazer/pkg/jwt"
+	"github.com/nuomizi-fw/stargazer/pkg/logger"
 	"github.com/nuomizi-fw/stargazer/repository"
 	"go.uber.org/fx"
 )
@@ -29,8 +30,17 @@ type StargazerService struct {
 func NewStargazerService(
 	repository repository.Repository,
 ) StargazerService {
+	// Generate key pair for JWT signing
+	privateKey, publicKey, err := jwt.GenerateKeyPair()
+	if err != nil {
+		logger.Fatalf("Failed to generate key pair: %s", err)
+	}
+
 	return StargazerService{
-		Auth: NewAuthService(repository),
-		User: NewUserService(repository),
+		Auth:       NewAuthService(repository, privateKey, publicKey),
+		User:       NewUserService(repository),
+		Rss:        NewRssService(),
+		Downloader: NewDownloaderService(),
+		Search:     NewSearchService(),
 	}
 }

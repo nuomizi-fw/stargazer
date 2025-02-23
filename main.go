@@ -1,5 +1,5 @@
 //go:generate bash -c "go generate ./ent"
-//go:generate bash -c "mkdir -p oapi && go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=oapi.yaml api/openapi.yaml"
+//go:generate bash -c "go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -generate types,spec,fiber -package api api/openapi.yaml > api/api.gen.go"
 package main
 
 import (
@@ -15,8 +15,8 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
+	"github.com/nuomizi-fw/stargazer/api"
 	"github.com/nuomizi-fw/stargazer/core"
-	"github.com/nuomizi-fw/stargazer/oapi"
 	"github.com/nuomizi-fw/stargazer/repository"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
@@ -70,6 +70,7 @@ func StartStargazer(
 	logger core.StargazerLogger,
 	server core.StargazerServer,
 	router router.StargazerRouter,
+	repository repository.Repository,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
@@ -81,10 +82,12 @@ func StartStargazer(
 				}
 			}
 
-			swagger, err := oapi.GetSwagger()
+			swagger, err := api.GetSwagger()
 			if err != nil {
 				logger.Panic("Failed to get swagger: %s", zap.Error(err))
 			}
+
+			// Register documentation handlers first
 			server.App.Use(adaptor.HTTPHandler(NewDocsRouter(swagger, docHTML, docYAML)))
 
 			logger.Fatal(server.App.Listen(config.Server.Port))

@@ -245,5 +245,8 @@ stargazer.db
 stargazer.toml
 
 # OpenApi
-oapi
+api/api.gen.go
 openapitools.json
+
+# windsurf rules
+.windsurfrules

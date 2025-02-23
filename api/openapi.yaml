@@ -6,17 +6,13 @@ info:
   description: Stargazer API Reference
 
 servers:
-  - url: /
+  - url: /api
     description: Stargazer API
 
 security:
   - access_token: []
 
 tags:
-  # Ping: Basic system health check
-  - name: Ping
-    description: Service health check, server status monitoring, and API version info
-
   # Auth: Authentication and user management
   - name: Auth
     description: User authentication, API keys, server sharing, managed users, SSO integration
@@ -90,18 +86,6 @@ tags:
     description: User management, permissions, roles, user profiles
 
 paths:
-  /ping:
-    get:
-      tags: [Ping]
-      summary: Ping
-      description: Check if the server is alive
-      operationId: ping
-      responses:
-        "200":
-          $ref: "#/components/responses/ResponseOK"
-        "500":
-          $ref: "#/components/responses/ResponseInternalServerError"
-
   /auth/register:
     post:
       tags: [Auth]
@@ -115,6 +99,8 @@ paths:
           $ref: "#/components/responses/GetRegisterResponseOK"
         "400":
           $ref: "#/components/responses/ResponseBadRequest"
+        "409":
+          $ref: "#/components/responses/ResponseConflictError"
         "500":
           $ref: "#/components/responses/ResponseInternalServerError"
 
@@ -175,10 +161,11 @@ paths:
 components:
   securitySchemes:
     access_token:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+      type: apiKey
+      in: header
+      name: Authorization
       description: JWT access token obtained from login
+
     refresh_token:
       type: http
       scheme: bearer
@@ -200,14 +187,16 @@ components:
             required:
               - username
               - password
+              - client_type
             properties:
               username:
                 type: string
-                example: "johndoe"
+                example: "user123"
               password:
                 type: string
-                format: password
-                example: "your-secure-password"
+                example: "Password123!"
+              client_type:
+                $ref: "#/components/schemas/ClientType"
 
     RegisterRequest:
       required: true
@@ -222,18 +211,14 @@ components:
             properties:
               username:
                 type: string
-                example: "johndoe"
+                example: "user123"
               password:
                 type: string
-                format: password
-                example: "your-secure-password"
+                example: "Password123!"
               email:
                 type: string
                 format: email
-                example: "john@example.com"
-              display_name:
-                type: string
-                example: "John Doe"
+                example: "user@example.com"
 
     RefreshTokenRequest:
       required: true
@@ -319,6 +304,20 @@ components:
           schema:
             $ref: "#/components/schemas/BaseResponse"
 
+    ResponseConflictError:
+      description: Conflict Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+    ResponseForbiddenError:
+      description: Forbidden Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
     ResponseInternalServerError:
       description: Internal Server Error
       content:
@@ -332,25 +331,23 @@ components:
         application/json:
           schema:
             type: object
+            required:
+              - token
             properties:
-              access_token:
-                type: string
-                example: "eyJhbGciOiJIUzI1NiIs..."
-              token_type:
-                type: string
-                example: "Bearer"
-              expires_in:
-                type: integer
-                example: 3600
-              user:
-                $ref: "#/components/schemas/User"
+              token:
+                $ref: "#/components/schemas/Token"
 
     GetRegisterResponseOK:
       description: Registration successful
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/User"
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                $ref: "#/components/schemas/User"
 
     PostRefreshTokenResponseOK:
       description: Refresh token successful
@@ -358,23 +355,23 @@ components:
         application/json:
           schema:
             type: object
+            required:
+              - token
             properties:
-              access_token:
-                type: string
-                example: "eyJhbGciOiJIUzI1NiIs..."
-              refresh_token:
-                type: string
-                example: "eyJhbGciOiJIUzI1NiIs..."
-              expires_in:
-                type: integer
-                example: 3600
+              token:
+                $ref: "#/components/schemas/Token"
 
     GetUserProfileResponseOK:
       description: User profile retrieved successfully
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/User"
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                $ref: "#/components/schemas/User"
 
   schemas:
     BaseResponse:
@@ -449,8 +446,40 @@ components:
               items: {}
               example: []
 
+    ClientType:
+      type: string
+      enum:
+        - web
+        - native
+      description: Type of client making the request
+
+    Token:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIs..."
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIs..."
+        expires_in:
+          type: integer
+          example: 3600
+
     User:
       type: object
+      required:
+        - id
+        - username
+        - email
+        - display_name
+        - avatar
+        - role
+        - status
       properties:
         id:
           type: integer

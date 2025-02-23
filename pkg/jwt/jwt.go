@@ -5,14 +5,30 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/big"
 	"net/http"
 	"time"
 
-	"github.com/bytedance/sonic"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/nuomizi-fw/stargazer/api"
+)
+
+const (
+	TokenTypeAccess  = "access"
+	TokenTypeRefresh = "refresh"
+
+	// Web client has shorter token duration for security
+	WebAccessTokenDuration  = 2 * time.Hour
+	WebRefreshTokenDuration = 7 * 24 * time.Hour
+
+	// Native client has longer token duration for better UX
+	NativeAccessTokenDuration  = 24 * time.Hour
+	NativeRefreshTokenDuration = 30 * 24 * time.Hour
+
+	JWKSPath = "/.well-known/jwks.json"
 )
 
 type JWK struct {
@@ -26,29 +42,51 @@ type JWKS struct {
 	Keys []JWK `json:"keys"`
 }
 
-const JWKSPath = "/.well-known/jwks.json"
-
 type Claims struct {
-	Username string `json:"username"`
-	ID       int    `json:"id"`
+	Username   string `json:"username"`
+	ID         int    `json:"id"`
+	TokenType  string `json:"token_type"`
+	ClientType string `json:"client_type"`
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(username string, privateKey *ecdsa.PrivateKey, id int, issuer string, t time.Duration) (string, error) {
+func GenerateToken(username string, privateKey *ecdsa.PrivateKey, id int, tokenType string, clientType string, t time.Duration) (string, error) {
 	claims := Claims{
-		username,
-		id,
-		jwt.RegisteredClaims{
+		Username:   username,
+		ID:         id,
+		TokenType:  tokenType,
+		ClientType: clientType,
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(t)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    issuer,
+			Issuer:    "stargazer",
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
 	signedToken, err := token.SignedString(privateKey)
 	return signedToken, err
+}
+
+// get AccessToken for web client
+func GetWebAccessToken(username string, privateKey *ecdsa.PrivateKey, id int) (string, error) {
+	return GenerateToken(username, privateKey, id, TokenTypeAccess, string(api.Web), WebAccessTokenDuration)
+}
+
+// get RefreshToken for web client
+func GetWebRefreshToken(username string, private *ecdsa.PrivateKey, id int) (string, error) {
+	return GenerateToken(username, private, id, TokenTypeRefresh, string(api.Web), WebRefreshTokenDuration)
+}
+
+// get AccessToken for native client
+func GetNativeAccessToken(username string, privateKey *ecdsa.PrivateKey, id int) (string, error) {
+	return GenerateToken(username, privateKey, id, TokenTypeAccess, string(api.Native), NativeAccessTokenDuration)
+}
+
+// get RefreshToken for native client
+func GetNativeRefreshToken(username string, private *ecdsa.PrivateKey, id int) (string, error) {
+	return GenerateToken(username, private, id, TokenTypeRefresh, string(api.Native), NativeRefreshTokenDuration)
 }
 
 func ParseToken(signedToken string, publicKeyFunc func() (*ecdsa.PublicKey, error)) (*Claims, error) {
@@ -69,26 +107,38 @@ func ParseToken(signedToken string, publicKeyFunc func() (*ecdsa.PublicKey, erro
 	return nil, errors.New("invalid token")
 }
 
-// get AccessToken
-func GetAccessToken(username string, privateKey *ecdsa.PrivateKey, id int) (string, error) {
-	return GenerateToken(username, privateKey, id, "casaos", 3*time.Hour)
-}
-
-func GetRefreshToken(username string, private *ecdsa.PrivateKey, id int) (string, error) {
-	return GenerateToken(username, private, id, "refresh", 7*24*time.Hour)
-}
-
 func Validate(token string, publicKeyFunc func() (*ecdsa.PublicKey, error)) (bool, *Claims, error) {
 	claims, err := ParseToken(token, publicKeyFunc)
 	if err != nil {
 		return false, nil, err
 	}
 
-	if claims != nil {
-		return true, claims, nil
+	if claims == nil {
+		return false, nil, errors.New("invalid token")
 	}
 
-	return false, nil, errors.New("invalid token")
+	// Validate token type
+	if claims.TokenType != TokenTypeAccess && claims.TokenType != TokenTypeRefresh {
+		return false, nil, errors.New("invalid token type")
+	}
+
+	// Validate client type
+	if claims.ClientType != string(api.Web) && claims.ClientType != string(api.Native) {
+		return false, nil, errors.New("invalid client type")
+	}
+
+	// Additional validation for refresh tokens
+	if claims.TokenType == TokenTypeRefresh {
+		maxDuration := WebRefreshTokenDuration
+		if claims.ClientType == string(api.Native) {
+			maxDuration = NativeRefreshTokenDuration
+		}
+		if time.Since(claims.IssuedAt.Time) > maxDuration {
+			return false, nil, errors.New("refresh token expired")
+		}
+	}
+
+	return true, claims, nil
 }
 
 func GenerateKeyPair() (*ecdsa.PrivateKey, *ecdsa.PublicKey, error) {
@@ -114,12 +164,12 @@ func GenerateJwksJSON(publicKey *ecdsa.PublicKey) ([]byte, error) {
 		Keys: []JWK{jwk},
 	}
 
-	return sonic.Marshal(jwks)
+	return json.Marshal(jwks)
 }
 
 func PublicKeyFromJwksJSON(jwksJSON []byte) (*ecdsa.PublicKey, error) {
 	var jwks JWKS
-	err := sonic.Unmarshal(jwksJSON, &jwks)
+	err := json.Unmarshal(jwksJSON, &jwks)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling JWKS JSON: %w", err)
 	}
