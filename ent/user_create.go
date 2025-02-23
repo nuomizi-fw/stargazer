@@ -38,12 +38,6 @@ func (uc *UserCreate) SetPassword(s string) *UserCreate {
 	return uc
 }
 
-// SetDisplayName sets the "display_name" field.
-func (uc *UserCreate) SetDisplayName(s string) *UserCreate {
-	uc.mutation.SetDisplayName(s)
-	return uc
-}
-
 // SetAvatar sets the "avatar" field.
 func (uc *UserCreate) SetAvatar(s string) *UserCreate {
 	uc.mutation.SetAvatar(s)
@@ -193,14 +187,6 @@ func (uc *UserCreate) check() error {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if _, ok := uc.mutation.DisplayName(); !ok {
-		return &ValidationError{Name: "display_name", err: errors.New(`ent: missing required field "User.display_name"`)}
-	}
-	if v, ok := uc.mutation.DisplayName(); ok {
-		if err := user.DisplayNameValidator(v); err != nil {
-			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "User.display_name": %w`, err)}
-		}
-	}
 	if _, ok := uc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`ent: missing required field "User.role"`)}
 	}
@@ -260,10 +246,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 		_node.Password = value
-	}
-	if value, ok := uc.mutation.DisplayName(); ok {
-		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
-		_node.DisplayName = value
 	}
 	if value, ok := uc.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

@@ -17,7 +17,6 @@ import (
 	"github.com/nuomizi-fw/stargazer/api"
 	"github.com/nuomizi-fw/stargazer/core"
 	sjwt "github.com/nuomizi-fw/stargazer/pkg/jwt"
-	"github.com/nuomizi-fw/stargazer/pkg/logger"
 	"github.com/nuomizi-fw/stargazer/service"
 	middleware "github.com/oapi-codegen/fiber-middleware"
 	"go.uber.org/fx"
@@ -39,6 +38,7 @@ var (
 )
 
 type StargazerRouter struct {
+	logger core.StargazerLogger
 	service.StargazerService
 }
 
@@ -46,9 +46,7 @@ func isPublicPath(method []byte, path string) bool {
 	// Public GET endpoints
 	if bytes.Equal(method, []byte("GET")) {
 		switch path {
-		case "/favicon.ico",
-			"/docs/openapi.yaml",
-			sjwt.JWKSPath:
+		case "/favicon.ico", sjwt.JWKSPath:
 			return true
 		}
 	}
@@ -56,8 +54,8 @@ func isPublicPath(method []byte, path string) bool {
 	// Public POST endpoints
 	if bytes.Equal(method, []byte("POST")) {
 		switch path {
-		case "/auth/login",
-			"/auth/register":
+		case "/api/auth/login",
+			"/api/auth/register":
 			return true
 		}
 	}
@@ -66,6 +64,7 @@ func isPublicPath(method []byte, path string) bool {
 }
 
 func NewStargazerRouter(
+	logger core.StargazerLogger,
 	config core.StargazerConfig,
 	server core.StargazerServer,
 	service service.StargazerService,

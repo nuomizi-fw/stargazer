@@ -491,9 +491,6 @@ components:
           type: string
           format: email
           example: "john@example.com"
-        display_name:
-          type: string
-          example: "John Doe"
         avatar:
           type: string
           example: "https://example.com/avatar.jpg"

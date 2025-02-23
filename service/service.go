@@ -1,8 +1,8 @@
 package service
 
 import (
+	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
-	"github.com/nuomizi-fw/stargazer/pkg/logger"
 	"github.com/nuomizi-fw/stargazer/repository"
 	"go.uber.org/fx"
 )
@@ -28,6 +28,7 @@ type StargazerService struct {
 }
 
 func NewStargazerService(
+	logger core.StargazerLogger,
 	repository repository.Repository,
 ) StargazerService {
 	// Generate key pair for JWT signing
@@ -38,7 +39,7 @@ func NewStargazerService(
 
 	return StargazerService{
 		Auth:       NewAuthService(repository, privateKey, publicKey),
-		User:       NewUserService(repository),
+		User:       NewUserService(logger, repository),
 		Rss:        NewRssService(),
 		Downloader: NewDownloaderService(),
 		Search:     NewSearchService(),

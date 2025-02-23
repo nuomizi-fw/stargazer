@@ -14,7 +14,6 @@ var (
 		{Name: "username", Type: field.TypeString, Unique: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "password", Type: field.TypeString},
-		{Name: "display_name", Type: field.TypeString},
 		{Name: "avatar", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"admin", "user"}, Default: "user"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"active", "inactive", "banned"}, Default: "active"},
@@ -40,12 +39,12 @@ var (
 			{
 				Name:    "user_role",
 				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[6]},
+				Columns: []*schema.Column{UsersColumns[5]},
 			},
 			{
 				Name:    "user_status",
 				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[7]},
+				Columns: []*schema.Column{UsersColumns[6]},
 			},
 		},
 	}

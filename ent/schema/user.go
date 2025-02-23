@@ -24,8 +24,6 @@ func (User) Fields() []ent.Field {
 		field.String("password").
 			Sensitive().
 			NotEmpty(),
-		field.String("display_name").
-			NotEmpty(),
 		field.String("avatar").
 			Optional(),
 		field.Enum("role").

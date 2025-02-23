@@ -2,6 +2,7 @@ package router
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/nuomizi-fw/stargazer/api"
@@ -51,6 +52,7 @@ func (sr StargazerRouter) Register(ctx *fiber.Ctx) error {
 	}
 
 	data, err := sr.Auth.Register(registerRequest)
+	fmt.Println(err)
 	if err != nil {
 		switch {
 		case errors.Is(err, service.ErrUserExists):

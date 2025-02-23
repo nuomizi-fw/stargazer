@@ -70,20 +70,6 @@ func (uu *UserUpdate) SetNillablePassword(s *string) *UserUpdate {
 	return uu
 }
 
-// SetDisplayName sets the "display_name" field.
-func (uu *UserUpdate) SetDisplayName(s string) *UserUpdate {
-	uu.mutation.SetDisplayName(s)
-	return uu
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableDisplayName(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetDisplayName(*s)
-	}
-	return uu
-}
-
 // SetAvatar sets the "avatar" field.
 func (uu *UserUpdate) SetAvatar(s string) *UserUpdate {
 	uu.mutation.SetAvatar(s)
@@ -210,11 +196,6 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.DisplayName(); ok {
-		if err := user.DisplayNameValidator(v); err != nil {
-			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "User.display_name": %w`, err)}
-		}
-	}
 	if v, ok := uu.mutation.Role(); ok {
 		if err := user.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`ent: validator failed for field "User.role": %w`, err)}
@@ -248,9 +229,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
-	}
-	if value, ok := uu.mutation.DisplayName(); ok {
-		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)
@@ -328,20 +306,6 @@ func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
 func (uuo *UserUpdateOne) SetNillablePassword(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetPassword(*s)
-	}
-	return uuo
-}
-
-// SetDisplayName sets the "display_name" field.
-func (uuo *UserUpdateOne) SetDisplayName(s string) *UserUpdateOne {
-	uuo.mutation.SetDisplayName(s)
-	return uuo
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableDisplayName(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetDisplayName(*s)
 	}
 	return uuo
 }
@@ -485,11 +449,6 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.DisplayName(); ok {
-		if err := user.DisplayNameValidator(v); err != nil {
-			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "User.display_name": %w`, err)}
-		}
-	}
 	if v, ok := uuo.mutation.Role(); ok {
 		if err := user.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`ent: validator failed for field "User.role": %w`, err)}
@@ -540,9 +499,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
-	}
-	if value, ok := uuo.mutation.DisplayName(); ok {
-		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

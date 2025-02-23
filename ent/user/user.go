@@ -20,8 +20,6 @@ const (
 	FieldEmail = "email"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldDisplayName holds the string denoting the display_name field in the database.
-	FieldDisplayName = "display_name"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
 	// FieldRole holds the string denoting the role field in the database.
@@ -42,7 +40,6 @@ var Columns = []string{
 	FieldUsername,
 	FieldEmail,
 	FieldPassword,
-	FieldDisplayName,
 	FieldAvatar,
 	FieldRole,
 	FieldStatus,
@@ -67,8 +64,6 @@ var (
 	EmailValidator func(string) error
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	PasswordValidator func(string) error
-	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
-	DisplayNameValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -151,11 +146,6 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
-}
-
-// ByDisplayName orders the results by the display_name field.
-func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
 // ByAvatar orders the results by the avatar field.

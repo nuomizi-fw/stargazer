@@ -4,8 +4,8 @@ import (
 	"crypto/ecdsa"
 	"sync"
 
+	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
-	"github.com/nuomizi-fw/stargazer/pkg/logger"
 	"github.com/nuomizi-fw/stargazer/repository"
 )
 
@@ -31,6 +31,7 @@ type userService struct {
 }
 
 func NewUserService(
+	logger core.StargazerLogger,
 	repo repository.Repository,
 ) UserService {
 	privateKey, publicKey, err := jwt.GenerateKeyPair()

@@ -36,7 +36,6 @@ type UserMutation struct {
 	username      *string
 	email         *string
 	password      *string
-	display_name  *string
 	avatar        *string
 	role          *user.Role
 	status        *user.Status
@@ -252,42 +251,6 @@ func (m *UserMutation) OldPassword(ctx context.Context) (v string, err error) {
 // ResetPassword resets all changes to the "password" field.
 func (m *UserMutation) ResetPassword() {
 	m.password = nil
-}
-
-// SetDisplayName sets the "display_name" field.
-func (m *UserMutation) SetDisplayName(s string) {
-	m.display_name = &s
-}
-
-// DisplayName returns the value of the "display_name" field in the mutation.
-func (m *UserMutation) DisplayName() (r string, exists bool) {
-	v := m.display_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDisplayName returns the old "display_name" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldDisplayName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDisplayName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
-	}
-	return oldValue.DisplayName, nil
-}
-
-// ResetDisplayName resets all changes to the "display_name" field.
-func (m *UserMutation) ResetDisplayName() {
-	m.display_name = nil
 }
 
 // SetAvatar sets the "avatar" field.
@@ -517,7 +480,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 8)
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
 	}
@@ -526,9 +489,6 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.password != nil {
 		fields = append(fields, user.FieldPassword)
-	}
-	if m.display_name != nil {
-		fields = append(fields, user.FieldDisplayName)
 	}
 	if m.avatar != nil {
 		fields = append(fields, user.FieldAvatar)
@@ -559,8 +519,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Email()
 	case user.FieldPassword:
 		return m.Password()
-	case user.FieldDisplayName:
-		return m.DisplayName()
 	case user.FieldAvatar:
 		return m.Avatar()
 	case user.FieldRole:
@@ -586,8 +544,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldEmail(ctx)
 	case user.FieldPassword:
 		return m.OldPassword(ctx)
-	case user.FieldDisplayName:
-		return m.OldDisplayName(ctx)
 	case user.FieldAvatar:
 		return m.OldAvatar(ctx)
 	case user.FieldRole:
@@ -627,13 +583,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPassword(v)
-		return nil
-	case user.FieldDisplayName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDisplayName(v)
 		return nil
 	case user.FieldAvatar:
 		v, ok := value.(string)
@@ -736,9 +685,6 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldPassword:
 		m.ResetPassword()
-		return nil
-	case user.FieldDisplayName:
-		m.ResetDisplayName()
 		return nil
 	case user.FieldAvatar:
 		m.ResetAvatar()
