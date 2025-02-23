@@ -6,16 +6,10 @@ import (
 	"context"
 	_ "embed"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
-	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/gofiber/fiber/v2/middleware/adaptor"
-	"github.com/nuomizi-fw/stargazer/api"
 	"github.com/nuomizi-fw/stargazer/core"
 	"github.com/nuomizi-fw/stargazer/repository"
 	"github.com/nuomizi-fw/stargazer/router"
@@ -23,13 +17,6 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
-)
-
-var (
-	//go:embed api/openapi.yaml
-	docYAML string
-	//go:embed api/index.html
-	docHTML string
 )
 
 func main() {
@@ -82,14 +69,6 @@ func StartStargazer(
 				}
 			}
 
-			swagger, err := api.GetSwagger()
-			if err != nil {
-				logger.Panic("Failed to get swagger: %s", zap.Error(err))
-			}
-
-			// Register documentation handlers first
-			server.App.Use(adaptor.HTTPHandler(NewDocsRouter(swagger, docHTML, docYAML)))
-
 			logger.Fatal(server.App.Listen(config.Server.Port))
 
 			return nil
@@ -100,30 +79,5 @@ func StartStargazer(
 			}
 			return nil
 		},
-	})
-}
-
-func NewDocsRouter(swagger *openapi3.T, docHTML, docYAML string) http.Handler {
-	u, err := url.Parse(swagger.Servers[0].URL)
-	if err != nil {
-		return nil
-	}
-
-	apiPath := strings.TrimRight(u.Path, "/")
-	docsPath := "/docs" + apiPath
-
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == docsPath {
-			if _, err := w.Write([]byte(docHTML)); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-			}
-			return
-		}
-
-		if r.URL.Path == "/openapi.yaml" {
-			if _, err := w.Write([]byte(docYAML)); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-			}
-		}
 	})
 }

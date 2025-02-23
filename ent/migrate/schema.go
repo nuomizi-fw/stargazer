@@ -14,6 +14,10 @@ var (
 		{Name: "username", Type: field.TypeString, Unique: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "password", Type: field.TypeString},
+		{Name: "display_name", Type: field.TypeString},
+		{Name: "avatar", Type: field.TypeString, Nullable: true},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"admin", "user"}, Default: "user"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"active", "inactive", "banned"}, Default: "active"},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
@@ -32,6 +36,16 @@ var (
 				Name:    "user_email",
 				Unique:  false,
 				Columns: []*schema.Column{UsersColumns[2]},
+			},
+			{
+				Name:    "user_role",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[6]},
+			},
+			{
+				Name:    "user_status",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[7]},
 			},
 		},
 	}

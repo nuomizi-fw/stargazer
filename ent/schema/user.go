@@ -24,6 +24,16 @@ func (User) Fields() []ent.Field {
 		field.String("password").
 			Sensitive().
 			NotEmpty(),
+		field.String("display_name").
+			NotEmpty(),
+		field.String("avatar").
+			Optional(),
+		field.Enum("role").
+			Values("admin", "user").
+			Default("user"),
+		field.Enum("status").
+			Values("active", "inactive", "banned").
+			Default("active"),
 		field.Time("created_at").
 			Default(time.Now),
 		field.Time("updated_at").
@@ -42,5 +52,7 @@ func (User) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("username"),
 		index.Fields("email"),
+		index.Fields("role"),
+		index.Fields("status"),
 	}
 }
