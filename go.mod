@@ -5,7 +5,6 @@ go 1.24.0
 require (
 	entgo.io/ent v0.14.2
 	github.com/getkin/kin-openapi v0.129.0
-	github.com/gofiber/contrib/jwt v1.0.10
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/oapi-codegen/fiber-middleware v1.0.2
@@ -19,18 +18,7 @@ require (
 )
 
 require (
-	github.com/gorilla/mux v1.8.1 // indirect
-	github.com/ncruces/go-strftime v0.1.9 // indirect
-	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1 // indirect
-	github.com/oasdiff/yaml v0.0.0-20241214135536-5f7845c759c8 // indirect
-	github.com/oasdiff/yaml3 v0.0.0-20241214160948-977117996672 // indirect
-	github.com/speakeasy-api/jsonpath v0.6.1 // indirect
-	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
-)
-
-require (
 	ariga.io/atlas v0.31.1-0.20250212144724-069be8033e83 // indirect
-	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
@@ -43,6 +31,7 @@ require (
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-7 // indirect; indire
 	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
@@ -56,6 +45,10 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+	github.com/ncruces/go-strftime v0.1.9 // indirect
+	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1 // indirect
+	github.com/oasdiff/yaml v0.0.0-20241214135536-5f7845c759c8 // indirect
+	github.com/oasdiff/yaml3 v0.0.0-20241214160948-977117996672 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
@@ -63,6 +56,7 @@ require (
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
+	github.com/speakeasy-api/jsonpath v0.6.1 // indirect
 	github.com/speakeasy-api/openapi-overlay v0.10.1 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
@@ -72,6 +66,7 @@ require (
 	github.com/valyala/fasthttp v1.59.0 // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
 	github.com/zclconf/go-cty v1.16.2 // indirect
+	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect

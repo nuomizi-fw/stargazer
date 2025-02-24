@@ -11,6 +11,7 @@ import (
 	"syscall"
 
 	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/pkg/keystore"
 	"github.com/nuomizi-fw/stargazer/repository"
 	"github.com/nuomizi-fw/stargazer/router"
 	"github.com/nuomizi-fw/stargazer/service"
@@ -38,6 +39,7 @@ func main() {
 		router.Module,
 		service.Module,
 		repository.Module,
+		keystore.Module,
 		fx.Invoke(StartStargazer),
 	)
 

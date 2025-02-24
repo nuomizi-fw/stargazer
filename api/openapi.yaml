@@ -13,10 +13,6 @@ security:
   - access_token: []
 
 tags:
-  # Auth: Authentication and user management
-  - name: Auth
-    description: User authentication, API keys, server sharing, managed users, SSO integration
-
   # Media: Core media management
   - name: Media
     description: Library management, media scanning, metadata agents, collections, playlists
@@ -86,9 +82,9 @@ tags:
     description: User management, permissions, roles, user profiles
 
 paths:
-  /auth/register:
+  /user/register:
     post:
-      tags: [Auth]
+      tags: [User]
       summary: User Registration
       description: Register a new user account
       operationId: register
@@ -104,9 +100,9 @@ paths:
         "500":
           $ref: "#/components/responses/ResponseInternalServerError"
 
-  /auth/login:
+  /user/login:
     post:
-      tags: [Auth]
+      tags: [User]
       summary: User Login
       description: Authenticate user and get access token
       operationId: login
@@ -122,9 +118,9 @@ paths:
         "500":
           $ref: "#/components/responses/ResponseInternalServerError"
 
-  /auth/refresh:
+  /user/refresh:
     post:
-      tags: [Auth]
+      tags: [User]
       summary: Refresh Access Token
       description: Refresh access token
       operationId: refresh
@@ -166,17 +162,6 @@ components:
       name: Authorization
       description: JWT access token obtained from login
 
-    refresh_token:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT refresh token for obtaining new access tokens
-    api_key:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for service-to-service authentication
-
   requestBodies:
     LoginRequest:
       required: true
@@ -195,8 +180,6 @@ components:
               password:
                 type: string
                 example: "Password123!"
-              client_type:
-                $ref: "#/components/schemas/ClientType"
 
     RegisterRequest:
       required: true
@@ -445,13 +428,6 @@ components:
               type: array
               items: {}
               example: []
-
-    ClientType:
-      type: string
-      enum:
-        - web
-        - native
-      description: Type of client making the request
 
     Token:
       type: object

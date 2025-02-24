@@ -49,8 +49,13 @@ func defaultStargazerConfig() StargazerConfig {
 		Database: Database{
 			Type:        "sqlite3",
 			Port:        0,
+			Host:        "localhost",
+			User:        "",
+			Password:    "",
+			Name:        "stargazer",
 			DBFile:      "stargazer.db",
 			TablePrefix: "sg_",
+			SSLMode:     "disable",
 			Migrate:     true,
 		},
 		Logger: Logger{
