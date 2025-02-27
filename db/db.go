@@ -1,4 +1,4 @@
-package core
+package db
 
 import (
 	"context"
@@ -9,10 +9,14 @@ import (
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/nuomizi-fw/stargazer/ent"
 	"github.com/nuomizi-fw/stargazer/ent/hook"
+	"github.com/nuomizi-fw/stargazer/pkg/config"
 	"modernc.org/sqlite"
 )
+
+var db *ent.Client
 
 type sqliteDriver struct {
 	*sqlite.Driver
@@ -33,37 +37,47 @@ func (d sqliteDriver) Open(name string) (driver.Conn, error) {
 	return conn, nil
 }
 
-func init() {
-	sql.Register(dialect.SQLite, sqliteDriver{Driver: &sqlite.Driver{}})
-}
-
 type StargazerDB struct {
 	*ent.Client
 }
 
-func NewStargazerDB(config StargazerConfig, logger StargazerLogger) StargazerDB {
+func NewStargazerDB(config config.StargazerConfig) {
+	sql.Register(dialect.SQLite, sqliteDriver{Driver: &sqlite.Driver{}})
+
 	dsn := "file:" + config.Database.DBFile + "?cache=shared&_fk=1"
-	db, err := sql.Open(dialect.SQLite, dsn)
+	sqlDB, err := sql.Open(dialect.SQLite, dsn)
 	if err != nil {
-		logger.Error("Failed to open database", err)
+		log.Error("Failed to open database", err)
 	}
 
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(1)
-	db.SetConnMaxIdleTime(time.Second * 1000)
-	db.SetConnMaxLifetime(time.Second * 1000)
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(1)
+	sqlDB.SetConnMaxIdleTime(time.Second * 1000)
+	sqlDB.SetConnMaxLifetime(time.Second * 1000)
 
-	client := ent.NewClient(ent.Driver(entsql.OpenDB(dialect.SQLite, db)))
+	db = ent.NewClient(ent.Driver(entsql.OpenDB(dialect.SQLite, sqlDB)))
 
-	client.Use(func(next ent.Mutator) ent.Mutator {
+	db.Use(func(next ent.Mutator) ent.Mutator {
 		return hook.UserFunc(func(ctx context.Context, m *ent.UserMutation) (ent.Value, error) {
 			start := time.Now()
 			defer func() {
-				logger.Infof("Op=%s\tType=%s\tTime=%s\tConcreteType=%T\n", m.Op(), m.Type(), time.Since(start), m)
+				log.Infof("Op=%s\tType=%s\tTime=%s\tConcreteType=%T\n", m.Op(), m.Type(), time.Since(start), m)
 			}()
 			return next.Mutate(ctx, m)
 		})
 	})
+}
 
-	return StargazerDB{client}
+func CloseStargazerDB() {
+	err := db.Close()
+	if err != nil {
+		log.Error("Failed to close database", err)
+	}
+}
+
+func AutoMigrate() {
+	err := db.Schema.Create(context.Background())
+	if err != nil {
+		log.Error("Failed to migrate database", err)
+	}
 }

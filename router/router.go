@@ -11,24 +11,17 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/nuomizi-fw/stargazer/api"
-	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/pkg/config"
 	sjwt "github.com/nuomizi-fw/stargazer/pkg/jwt"
 	"github.com/nuomizi-fw/stargazer/pkg/keystore"
 	"github.com/nuomizi-fw/stargazer/service"
 	middleware "github.com/oapi-codegen/fiber-middleware"
-	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
 var (
-	Module = fx.Module(
-		"router",
-		fx.Provide(
-			NewStargazerRouter,
-		),
-	)
-
 	_ api.ServerInterface = (*StargazerRouter)(nil)
 
 	ErrInvalidTokenType = errors.New("invalid token type for this endpoint")
@@ -36,7 +29,6 @@ var (
 )
 
 type StargazerRouter struct {
-	logger core.StargazerLogger
 	service.StargazerService
 }
 
@@ -62,9 +54,8 @@ func isPublicPath(method []byte, path string) bool {
 }
 
 func NewStargazerRouter(
-	logger core.StargazerLogger,
-	config core.StargazerConfig,
-	server core.StargazerServer,
+	config config.StargazerConfig,
+	app *fiber.App,
 	service service.StargazerService,
 	ks *keystore.KeyStore,
 ) StargazerRouter {
@@ -74,7 +65,7 @@ func NewStargazerRouter(
 
 	_, publicKey := ks.GetKeyPair()
 
-	server.App.Get(sjwt.JWKSPath, func(c *fiber.Ctx) error {
+	app.Get(sjwt.JWKSPath, func(c *fiber.Ctx) error {
 		// Generate and serve JWKS
 		return c.JSON(sjwt.GenerateJwksJSON(publicKey))
 	})
@@ -109,7 +100,7 @@ func NewStargazerRouter(
 
 	swagger, err := api.GetSwagger()
 	if err != nil {
-		logger.Panic("Failed to get swagger: %s", zap.Error(err))
+		log.Panic("Failed to get swagger: %s", zap.Error(err))
 	}
 
 	u, err := url.Parse(swagger.Servers[0].URL)
@@ -124,7 +115,7 @@ func NewStargazerRouter(
 	})
 
 	// Register OpenAPI handlers
-	api.RegisterHandlersWithOptions(server.App, router, api.FiberServerOptions{
+	api.RegisterHandlersWithOptions(app, router, api.FiberServerOptions{
 		BaseURL: strings.TrimRight(u.Path, "/"),
 		Middlewares: []api.MiddlewareFunc{
 			validatorMiddleware, // Run OpenAPI validation first

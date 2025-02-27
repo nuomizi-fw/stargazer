@@ -5,14 +5,6 @@ import (
 	"sync"
 
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
-	"go.uber.org/fx"
-)
-
-var Module = fx.Module(
-	"keystore",
-	fx.Provide(
-		NewKeyStore,
-	),
 )
 
 type KeyStore struct {

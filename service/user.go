@@ -9,10 +9,8 @@ import (
 	"unicode"
 
 	"github.com/nuomizi-fw/stargazer/api"
-	"github.com/nuomizi-fw/stargazer/core"
+	"github.com/nuomizi-fw/stargazer/db"
 	"github.com/nuomizi-fw/stargazer/pkg/jwt"
-	"github.com/nuomizi-fw/stargazer/pkg/keystore"
-	"github.com/nuomizi-fw/stargazer/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -42,8 +40,6 @@ type UserService interface {
 var UserRegisterHash = sync.Map{}
 
 type userService struct {
-	logger     core.StargazerLogger
-	repo       repository.Repository
 	privateKey *ecdsa.PrivateKey
 	publicKey  *ecdsa.PublicKey
 }
@@ -116,7 +112,7 @@ func (u *userService) Register(register api.RegisterRequest) (api.User, error) {
 	}
 
 	// Check if user exists
-	exists, err := u.repo.UserExists(register.Username)
+	exists, err := db.UserExists(register.Username)
 	if err != nil {
 		return api.User{}, fmt.Errorf("error checking user existence: %w", err)
 	}
@@ -136,7 +132,7 @@ func (u *userService) Register(register api.RegisterRequest) (api.User, error) {
 		Email:    register.Email,
 	}
 
-	err = u.repo.CreateUser(user, string(hashedPassword))
+	err = db.CreateUser(user, string(hashedPassword))
 	if err != nil {
 		return api.User{}, fmt.Errorf("error creating user: %w", err)
 	}
@@ -146,7 +142,7 @@ func (u *userService) Register(register api.RegisterRequest) (api.User, error) {
 
 func (u *userService) Login(login api.LoginRequest) (api.Token, error) {
 	// Get user and password
-	user, hashedPassword, err := u.repo.GetUserWithPassword(login.Username)
+	user, hashedPassword, err := db.GetUserWithPassword(login.Username)
 	if err != nil {
 		// Don't expose internal errors to client
 		return api.Token{}, ErrInvalidCredentials
@@ -231,13 +227,6 @@ func (u *userService) ResetPassword() error {
 	return nil
 }
 
-func NewUserService(
-	logger core.StargazerLogger,
-	repo repository.Repository,
-	ks *keystore.KeyStore,
-) UserService {
-	return &userService{
-		logger: logger,
-		repo:   repo,
-	}
+func NewUserService() UserService {
+	return &userService{}
 }

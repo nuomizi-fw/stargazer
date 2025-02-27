@@ -11,7 +11,6 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/samber/lo v1.49.1
 	github.com/spf13/viper v1.19.0
-	go.uber.org/fx v1.23.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.34.0
 	modernc.org/sqlite v1.35.0
@@ -67,7 +66,6 @@ require (
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
 	github.com/zclconf/go-cty v1.16.2 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
-	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
 	golang.org/x/mod v0.23.0 // indirect
